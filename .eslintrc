@@ -1,0 +1,57 @@
+{
+    "root": true,
+    "parser": "@typescript-eslint/parser",
+    "plugins": [
+      "@typescript-eslint"
+    ],
+    "parserOptions": {
+      "ecmaVersion": 2019,
+      "project": "./tsconfig.json"
+    },
+    "extends": [
+      "eslint:recommended",
+      "plugin:@typescript-eslint/eslint-recommended",
+      "plugin:@typescript-eslint/recommended"
+    ],
+    "rules": {
+      "no-var": 2,
+      "eqeqeq": 2,
+      "@typescript-eslint/adjacent-overload-signatures": 2,
+      "@typescript-eslint/array-type": [2, { "default": "array", "readonly": "array"}],
+      "@typescript-eslint/await-thenable": 2,
+      "@typescript-eslint/ban-ts-comment": 2,
+      "@typescript-eslint/ban-tslint-comment": 2,
+      "@typescript-eslint/ban-types": 2,
+      "@typescript-eslint/consistent-indexed-object-style": [2, "index-signature"],
+      "@typescript-eslint/consistent-type-imports": [2, {"prefer": "no-type-imports"}],
+      "@typescript-eslint/explicit-function-return-type": 2,
+      "@typescript-eslint/explicit-member-accessibility": [2, { "overrides": { "constructors": "no-public" } }],
+      "@typescript-eslint/explicit-module-boundary-types": 2,
+      "@typescript-eslint/no-confusing-non-null-assertion": 2,
+      "@typescript-eslint/no-confusing-void-expression": [2, { "ignoreArrowShorthand": true}],
+      "@typescript-eslint/no-dynamic-delete": 2,
+      "@typescript-eslint/no-explicit-any": 2,
+      "@typescript-eslint/no-extra-non-null-assertion": 2,
+      "@typescript-eslint/no-floating-promises": 2,
+      "@typescript-eslint/no-invalid-void-type": 2,
+      "@typescript-eslint/no-misused-new": 2,
+      "@typescript-eslint/no-unsafe-call": 1,
+      "@typescript-eslint/no-unsafe-assignment": 1,
+      "@typescript-eslint/no-unnecessary-type-constraint": 1,
+      "@typescript-eslint/no-unnecessary-type-assertion": 1,
+      "@typescript-eslint/no-unnecessary-type-arguments": 1,
+      "@typescript-eslint/no-unnecessary-qualifier": 1,
+      "@typescript-eslint/no-unnecessary-boolean-literal-compare": 1,
+      "@typescript-eslint/no-extra-semi": 2,
+      "@typescript-eslint/no-var-requires": 2,
+      "@typescript-eslint/no-implied-eval": 2,
+
+      "brace-style": "off",
+      "@typescript-eslint/brace-style": [1, "stroustrup", { "allowSingleLine": true }],
+
+      "@typescript-eslint/promise-function-async": 1,
+      "@typescript-eslint/no-empty-interface": 1,
+      "@typescript-eslint/prefer-as-const": 1
+    }
+ }
+ 
