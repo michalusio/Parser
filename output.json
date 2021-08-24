@@ -1,0 +1,115 @@
+{
+  "nodes": [
+    {
+      "type": "function",
+      "returnType": "string",
+      "name": "someFunctionName",
+      "params": [
+        {
+          "name": "param1",
+          "type": "string"
+        },
+        {
+          "name": "param2",
+          "type": "unknown"
+        },
+        {
+          "name": "param3",
+          "type": "any"
+        }
+      ],
+      "body": [
+        {
+          "type": "let",
+          "variableName": "a"
+        },
+        {
+          "type": "let",
+          "variableName": "c",
+          "assignment": {
+            "type": "variable",
+            "name": "a"
+          }
+        }
+      ]
+    },
+    {
+      "type": "function",
+      "returnType": "unknown",
+      "name": "anotherFunction",
+      "params": [],
+      "body": [
+        {
+          "type": "let",
+          "variableName": "lmao"
+        },
+        {
+          "type": "assignment",
+          "to": {
+            "type": "variable",
+            "name": "lmao"
+          },
+          "value": {
+            "type": "property",
+            "name": "test",
+            "from": {
+              "type": "variable",
+              "name": "invoke"
+            }
+          }
+        },
+        {
+          "type": "assignment",
+          "to": {
+            "type": "property",
+            "name": "test",
+            "from": {
+              "type": "variable",
+              "name": "invoke"
+            }
+          },
+          "value": {
+            "type": "methodCall",
+            "from": {
+              "type": "property",
+              "name": "something",
+              "from": {
+                "type": "variable",
+                "name": "do"
+              }
+            }
+          }
+        },
+        {
+          "type": "methodCall",
+          "from": {
+            "type": "property",
+            "name": "test",
+            "from": {
+              "type": "variable",
+              "name": "lmao"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "object",
+      "name": "SomeObject",
+      "properties": [
+        {
+          "name": "id",
+          "type": "int"
+        },
+        {
+          "name": "userId",
+          "type": "long"
+        },
+        {
+          "name": "someData",
+          "type": "string"
+        }
+      ]
+    }
+  ]
+}

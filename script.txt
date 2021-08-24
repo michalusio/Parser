@@ -1,0 +1,18 @@
+string someFunctionName(string param1, unknown param2, any param3) {
+  int a;
+  int c = a;
+}
+
+unknown anotherFunction() {
+  string lmao;
+  lmao[2] = invoke.test;
+  invoke.test = do.something()
+  lmao.test(invoke(), 5 + 3 + 8 * 2);
+  a.b().c[2].d().x = 1;
+}
+
+type SomeObject {
+  int id;
+  long userId;
+  string someData;
+}

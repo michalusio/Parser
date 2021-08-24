@@ -2,14 +2,14 @@
   "compilerOptions": {
     "outDir": "dist",
     "rootDir": "src",
-    "target": "ES2019",
-    "module": "CommonJs",
+    "target": "es2020",
+    "module": "CommonJS",
     "resolveJsonModule": true,
     "noEmitOnError": true,
     "sourceMap": true,
     "skipLibCheck": true,
-    "strictFunctionTypes": true,
-    "strictBindCallApply": true
+    "strict": true,
+    "lib": ["ES2020"]
   },
   "include": ["./src/**/*"]
 }
