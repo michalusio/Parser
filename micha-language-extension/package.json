@@ -1,6 +1,6 @@
 {
-    "name": "micha-language-extension",
-    "displayName": "Micha Language Extension",
+    "name": "m-language-extension",
+    "displayName": "M-Language Extension",
     "description": "",
     "version": "0.0.1",
     "engines": {
@@ -11,15 +11,15 @@
     ],
     "contributes": {
         "languages": [{
-            "id": "micha-lang",
-            "aliases": ["Micha Language", "micha-lang"],
-            "extensions": [".micha"],
+            "id": "m-lang",
+            "aliases": ["M-Language", "m-lang"],
+            "extensions": [".mlang"],
             "configuration": "./language-configuration.json"
         }],
         "grammars": [{
-            "language": "micha-lang",
-            "scopeName": "source.micha",
-            "path": "./syntaxes/micha-lang.tmLanguage.json"
+            "language": "m-lang",
+            "scopeName": "source.mlang",
+            "path": "./syntaxes/m-lang.tmLanguage.json"
         }]
     }
 }

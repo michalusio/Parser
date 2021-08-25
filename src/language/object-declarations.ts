@@ -1,15 +1,15 @@
-import { between, map, oneOrMany, opt, Parser, seq, spacesPlus, str, wspaces } from '../parser/parser';
-import { objectName, parameterName, parameterType } from './core';
+import { between, map, oneOrMany, opt, Parser, seq, spacesPlus, str } from '../parser/parser';
+import { objectName, parameterName, parameterType, wspacesOrComment } from './core';
 import { ObjectDeclaration, Property } from './interfaces';
 
 function property(): Parser<Property> {
   return map(
     seq(
-      wspaces,
+      wspacesOrComment,
       parameterType,
-      wspaces,
+      wspacesOrComment,
       parameterName,
-      wspaces,
+      wspacesOrComment,
       str(';')
     ),
     ([, type, , name, ]) => ({kind: 'property', name, type})
@@ -17,7 +17,7 @@ function property(): Parser<Property> {
 }
 
 function properties(): Parser<Property[]> {
-  return map(opt(oneOrMany(property(), wspaces)), (props) => (props ?? []));
+  return map(opt(oneOrMany(property(), wspacesOrComment)), (props) => (props ?? []));
 }
 
 export function objectDeclaration(): Parser<ObjectDeclaration> {
@@ -26,7 +26,7 @@ export function objectDeclaration(): Parser<ObjectDeclaration> {
           str('type'),
           spacesPlus,
           objectName,
-          between(seq(wspaces, str('{')), properties(), seq(wspaces, str('}')))
+          between(seq(wspacesOrComment, str('{')), properties(), seq(wspacesOrComment, str('}')))
       ),
       ([, , name, params]) => ({kind: 'object', name, properties: params})
   );

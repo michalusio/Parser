@@ -1,6 +1,6 @@
 {
 	"$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
-	"name": "Micha Language",
+	"name": "M-Lang",
 	"patterns": [{ "include": "#functionDeclaration" }, { "include": "#objectDeclaration" }, { "include": "#expression" }],
 	"repository": {
 		"expression": {
@@ -11,20 +11,21 @@
 				{ "include": "#paren-expression" },
 				{ "include": "#bracket-expression" },
 				{ "include": "#comment"},
+				{ "include": "#commentBlock"},
 				{ "include": "#let" },
 				{ "include": "#words" }
 			]
     },
 		"words": {
-			"name": "support.type.property-name.micha-lang",
+			"name": "support.type.property-name.m-lang",
 			"match": "\\w"
 		},
 		"let": {
 			"begin": "(\\w+) (\\w+) *(?=.*;)(?!{)",
 			"end": ";",
 			"beginCaptures": {
-				"1": { "name": "entity.name.type" },
-				"2": { "name": "entity.name.tag" }
+				"1": { "name": "entity.name.type.m-lang" },
+				"2": { "name": "entity.name.tag.m-lang" }
 			},
 			"patterns": [{"include": "#expression"}]
 		},
@@ -32,8 +33,8 @@
 			"begin": "(\\w+) (\\w+) *{",
 			"end": "}",
 			"beginCaptures": {
-				"1": { "name": "entity.name.tag" },
-				"2": { "name": "entity.name.type" }
+				"1": { "name": "entity.name.tag.m-lang" },
+				"2": { "name": "entity.name.type.m-lang" }
 			},
 			"patterns": [{"include": "#expression"}]
 		},
@@ -41,8 +42,8 @@
 			"begin": "(\\w+) (\\w+)\\(",
 			"end": "\\)",
 			"beginCaptures": {
-				"1": { "name": "meta.return-type entity.name.type" },
-				"2": { "name": "entity.name.function" }
+				"1": { "name": "meta.return-type.m-lang entity.name.type.m-lang" },
+				"2": { "name": "entity.name.function.m-lang" }
 			},
 			"patterns": [{"include": "#functionParams"}]
 		},
@@ -50,27 +51,27 @@
 			"begin": "",
 			"end": ",? *(\\w+) (\\w+) *",
 			"beginCaptures": {
-				"1": { "name": "meta.return-type entity.name.type" },
-				"2": { "name": "support.type.property-name.micha-lang" }
+				"1": { "name": "meta.return-type.m-lang entity.name.type.m-lang" },
+				"2": { "name": "support.type.property-name.m-lang" }
 			},
 			"endCaptures": {
-				"1": { "name": "meta.return-type entity.name.type" },
-				"2": { "name": "support.type.property-name.micha-lang" }
+				"1": { "name": "meta.return-type.m-lang entity.name.type.m-lang" },
+				"2": { "name": "support.type.property-name.m-lang" }
 			},
 			"patterns": [{"include": "#functionParams"}]
 		},
 		"keywords": {
 			"patterns": [
 				{
-					"name": "keyword.control.micha-lang",
+					"name": "keyword.control.m-lang",
 					"match": "\\b(if|else)\\b"
 				},
 				{
-					"name": "constant.numeric.micha-lang",
+					"name": "constant.numeric.m-lang",
 					"match": "\\b\\d\\b"
 				},
 				{
-					"name": "keyword.operator.micha-lang",
+					"name": "keyword.operator.m-lang",
 					"match": "\\b(\\+|-|\\*|\\/)\\b"
 				}
 			]
@@ -78,11 +79,11 @@
 		"booleanLiteral": {
 			"patterns": [
 				{
-					"name": "constant.language.boolean.true.ts",
+					"name": "constant.language.boolean.true.m-lang",
 					"match": "(?<!\\.|\\$)\\btrue\\b(?!\\$)"
 				},
 				{
-					"name": "constant.language.boolean.false.ts",
+					"name": "constant.language.boolean.false.m-lang",
 					"match": "(?<!\\.|\\$)\\bfalse\\b(?!\\$)"
 				}
 			]
@@ -91,41 +92,46 @@
 		  "begin": "\\(",
 		  "end": "\\)",
 		  "beginCaptures": {
-				"0": { "name": "punctuation.paren.open" }
+				"0": { "name": "punctuation.paren.open.m-lang" }
 		  },
 		  "endCaptures": {
-				"0": { "name": "punctuation.paren.close" }
+				"0": { "name": "punctuation.paren.close.m-lang" }
 		  },
-		  "name": "expression.group",
+		  "name": "expression.group.m-lang",
 		  "patterns": [{ "include": "#expression" }]
 		},
 		"bracket-expression": {
 		  "begin": "{",
 		  "end": "}",
 		  "beginCaptures": {
-				"0": { "name": "punctuation.brack.open" }
+				"0": { "name": "punctuation.brack.open.m-lang" }
 		  },
 		  "endCaptures": {
-				"0": { "name": "punctuation.brack.close" }
+				"0": { "name": "punctuation.brack.close.m-lang" }
 		  },
-		  "name": "expression.group",
+		  "name": "expression.group.m-lang",
 		  "patterns": [{ "include": "#expression" }]
 		},
 		"strings": {
-			"name": "string.quoted.double.micha-lang",
+			"name": "string.quoted.double.m-lang",
 			"begin": "\"",
 			"end": "\"",
 			"patterns": [
 				{
-					"name": "constant.character.escape.micha-lang",
+					"name": "constant.character.escape.m-lang",
 					"match": "\\\\."
 				}
 			]
 		},
 		"comment": {
-			"name": "comment.line.double-slash.micha-lang",
+			"name": "comment.line.double-slash.m-lang",
 			"match": "//.*$"
+		},
+		"commentBlock": {
+			"name": "comment.block.m-lang",
+			"begin": "/\\*",
+			"end": "\\*/"
 		}
 	},
-	"scopeName": "source.micha"
+	"scopeName": "source.mlang"
 }

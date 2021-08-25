@@ -6,6 +6,9 @@ string someFunctionName(string param1, SomeObject param2, int param3) {
 string anotherFunction() {
   string lmao;
   lmao[2] = invoke.test;
+  /*
+  * And block comments, too!
+  */
   if (2)
   {
     invoke.test = do.something();

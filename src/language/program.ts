@@ -1,4 +1,5 @@
-import { anySmart, exhaust, expect, map, Parser, seq, wspaces } from '../parser/parser';
+import { anySmart, exhaust, expect, map, Parser, seq } from '../parser/parser';
+import { wspacesOrComment } from './core';
 import { functionDeclaration } from './function-declaration';
 import { Declaration, Program } from './interfaces';
 import { objectDeclaration } from './object-declarations';
@@ -9,6 +10,6 @@ const declaration = (): Parser<Declaration> => anySmart(
   );
 
 export function program(): Parser<Program> {
-    return map(exhaust(map(seq(wspaces, declaration(), wspaces), ([, dec,])=> dec)), (decs) => ({ kind: 'program', nodes: decs }));
+    return map(exhaust(map(seq(wspacesOrComment, declaration(), wspacesOrComment), ([, dec,])=> dec)), (decs) => ({ kind: 'program', nodes: decs }));
 }
 

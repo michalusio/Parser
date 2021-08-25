@@ -1,4 +1,4 @@
-import { Parser, regex } from '../parser/parser';
+import { any, oneOrMany, Parser, regex, seq, wspaces } from '../parser/parser';
 
 export const type = (expects: string): Parser<string> => regex(/[a-zA-Z][\w\d]*/, expects);
 export const name = (expects: string): Parser<string> => regex(/[a-zA-Z_][\w\d]*/, expects);
@@ -10,3 +10,11 @@ export const variableType = type('variable type');
 export const variableName = name('variable name');
 export const parameterName = name('parameter name');
 export const functionName = name('function name');
+
+export const wspacesOrComment = any(oneOrMany(
+  any(
+    seq(regex(/^(?:\s|\t|\n|\r)*\/\/.*?$/m, 'line comment'), wspaces),
+    seq(wspaces, regex(/\/\*.*?\*\//ms, 'block comment'), wspaces)
+  ),
+  wspaces
+), wspaces);

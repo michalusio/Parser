@@ -14,10 +14,9 @@ import {
   Result,
   seq,
   str,
-  wspaces,
   zeroOrMany,
 } from '../../parser/parser';
-import { parameterName } from '../core';
+import { parameterName, wspacesOrComment } from '../core';
 import {
   ArithmeticStatement,
   BoolValueStatement,
@@ -41,7 +40,7 @@ function lStatementSeparator(): Parser<LStatementSeparator> {
   return (ctx: Context): Result<LStatementSeparator> => any(
     str('.'),
     between(str('['), rStatement(), str('].')),
-    between(str('('), zeroOrMany(rStatement(), seq(wspaces, str(','), wspaces)), str(').'))
+    between(str('('), zeroOrMany(rStatement(), seq(wspacesOrComment, str(','), wspacesOrComment)), str(').'))
   )(ctx);
 }
 
@@ -71,7 +70,7 @@ export function methodCall(): Parser<MethodCallStatement> {
   return (ctx: Context): Result<MethodCallStatement> => {
     return expect(
       map(
-        seq(lStatement(), between(str('('), zeroOrMany(rStatement(), seq(wspaces, str(','), wspaces)), str(')'))),
+        seq(lStatement(), between(str('('), zeroOrMany(rStatement(), seq(wspacesOrComment, str(','), wspacesOrComment)), str(')'))),
         ([from, args]) => <MethodCallStatement>({ kind: 'methodCall', from, args })
       ),
       'method call'
@@ -102,7 +101,7 @@ const stringStatement: Parser<StringValueStatement> = map(
 );
 
 function operator<T extends string>(op: T): Parser<T> {
-  return between(wspaces, str(op), wspaces);
+  return between(wspacesOrComment, str(op), wspacesOrComment);
 }
 
 const addSubSeparator = any(operator('+'), operator('-'));
