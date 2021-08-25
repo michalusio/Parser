@@ -5,7 +5,7 @@ import { program } from './language/program';
 import { optimize } from './optimizers/optimizer';
 import { ParseShowErrors } from './parser/parser';
 
-const script = fs.readFileSync('./script.micha', 'utf8');
+const script = fs.readFileSync('./script.mlang', 'utf8');
 
 console.time('creating parser');
 const parser = program()
