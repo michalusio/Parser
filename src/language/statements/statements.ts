@@ -9,6 +9,7 @@ import {
   opt,
   Parser,
   realP,
+  regex,
   Result,
   seq,
   str,
@@ -24,6 +25,7 @@ import {
   MethodCallStatement,
   RealValueStatement,
   RStatement,
+  StringValueStatement,
   VariableStatement,
 } from '../interfaces';
 
@@ -43,15 +45,15 @@ function lStatementSeparator(): Parser<LStatementSeparator> {
 
 function processLStatement(left: LStatement, right: VariableStatement, separator: LStatementSeparator): LStatement {
   if (separator === '.') {
-    return ({ kind: 'property', to: right, from: left });
+    return ({ kind: 'propertyAccess', to: right, from: left });
   }
   else if (Array.isArray(separator)) {
     const call: MethodCallStatement = ({ kind: 'methodCall', from: left, args: separator });
-    return ({ kind: 'property', to: right, from: call });
+    return ({ kind: 'propertyAccess', to: right, from: call });
   }
   else {
     const index: IndexingStatement = ({ kind: 'indexing', from: left, index: separator });
-    return ({ kind: 'property', to: right, from: index });
+    return ({ kind: 'propertyAccess', to: right, from: index });
   }
 }
 
@@ -77,6 +79,24 @@ export function methodCall(): Parser<MethodCallStatement> {
 
 const intStatement: Parser<IntValueStatement> = map(intP, i => ({ kind: 'intValue', value: i }));
 const realStatement: Parser<RealValueStatement> = map(realP, i => ({ kind: 'realValue', value: i }));
+const stringStatement: Parser<StringValueStatement> = map(
+  between(str('"'), regex(/(?:[^\n\\"]|(?:\\(?:"|n|r|t|b|f|v|0|'|\\|(?:x[0-9a-fA-F][0-9a-fA-F]))))*/, 'String content'), str('"')),
+  str => ({
+    kind: 'stringValue',
+    value: str
+      .replace(/\\"/g,'"')
+      .replace(/\\'/g, "'")
+      .replace(/\\n/g, '\n')
+      .replace(/\\r/g, '\r')
+      .replace(/\\t/g, '\t')
+      .replace(/\\b/g, '\b')
+      .replace(/\\f/g, '\f')
+      .replace(/\\v/g, '\v')
+      .replace(/\\0/g, '\0')
+      .replace(/\\\\/g, '\\\\')
+      .replace(/\\x([0-9a-fA-F][0-9a-fA-F])/g, (_, hex) => String.fromCharCode(parseInt(hex, 16)))
+  })
+);
 
 function operator<T extends string>(op: T): Parser<T> {
   return between(wspaces, str(op), wspaces);
@@ -85,7 +105,7 @@ function operator<T extends string>(op: T): Parser<T> {
 const addSubSeparator = any(operator('+'), operator('-'));
 const mulDivSeparator = any(operator('*'), operator('/'));
 
-const anyNormalRStatement = any(realStatement, intStatement, methodCall(), lStatement());
+const anyNormalRStatement = any(realStatement, intStatement, stringStatement, methodCall(), lStatement());
 
 export function rStatement(): Parser<RStatement> {
   return expect(expr(), 'R statement');

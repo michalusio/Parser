@@ -15,7 +15,12 @@ export type FunctionDeclaration = Readonly<{
   name: string;
   type: string;
   params: Parameter[];
-  body: Statement[];
+  body: Scope;
+}>;
+
+export type Scope = Readonly<{
+  kind: 'scope';
+  lines: Statement[];
 }>;
 
 export type Parameter = Readonly<{
@@ -44,7 +49,14 @@ export type AssignmentStatement = Readonly<{
   value: RStatement;
 }>;
 
-export type Statement = LetStatement | MethodCallStatement | AssignmentStatement;
+export type IfElseStatement = Readonly<{
+  kind: 'if';
+  condition: RStatement;
+  then: Statement;
+  elseThen: Statement | undefined;
+}>;
+
+export type Statement = LetStatement | MethodCallStatement | AssignmentStatement | IfElseStatement | Scope;
 
 export type IntValueStatement = Readonly<{
   kind: 'intValue',
@@ -56,6 +68,11 @@ export type RealValueStatement = Readonly<{
   value: number
 }>;
 
+export type StringValueStatement = Readonly<{
+  kind: 'stringValue',
+  value: string
+}>;
+
 export type MethodCallStatement = Readonly<{
   kind: 'methodCall',
   from: LStatement,
@@ -65,6 +82,7 @@ export type MethodCallStatement = Readonly<{
 export type RStatement =
 IntValueStatement |
 RealValueStatement |
+StringValueStatement |
 LStatement |
 MethodCallStatement |
 ArithmeticStatement;
@@ -82,7 +100,7 @@ export type VariableStatement = Readonly<{
 }>;
 
 export type PropertyStatement = Readonly<{
-  kind: 'property',
+  kind: 'propertyAccess',
   to: LStatement,
   from: LStatement | MethodCallStatement
 }>;
@@ -95,4 +113,4 @@ export type IndexingStatement = Readonly<{
 
 export type LStatement = VariableStatement | PropertyStatement | IndexingStatement;
 
-export type ASTStatement = LStatement | RStatement | Declaration | Program | Property | Parameter;
+export type ASTStatement = Statement | RStatement | Declaration | Program | Property | Parameter;

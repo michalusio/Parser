@@ -132,9 +132,8 @@ export function any<T>(...parsers: Parser<T>[]): Parser<T> {
             }
             else return res;
         }
-        const failMessage = expected.length === 1 ? expected[0].expected : `any of ['${expected.map(e => e.expected).join("', '")}']`;
-        const longest = expected.map(e => e.ctx).reduce((a, b) => a.index > b.index ? a : b);
-        return failure(longest, failMessage, ['any', ...(expected.map(e => e.history.map(h => '  '+h).concat('###')).flat())]);
+        const longest = expected.reduce((a, b) => a.ctx.index > b.ctx.index ? a : b);
+        return failure(longest.ctx, longest.expected, ['any', ...longest.history]);
     }
 }
 
@@ -168,15 +167,18 @@ export function anySmart<T>(...parsers: Parser<T>[]): Parser<T> {
     }
 }
 
-export function map<A, B>(parser: Parser<A>, fn: (val: A) => B | undefined): Parser<B> {
+export function map<A, B>(parser: Parser<A>, fn: (val: A) => B): Parser<B> {
     return (ctx: Context): Result<B> => {
         const res = parser(ctx);
         if (isFailure(res)) return failure(res.ctx, res.expected, ['map', ...res.history]);
-        const newValue = fn(res.value);
-        if (newValue === undefined) {
+        try {
+            const newValue = fn(res.value);
+            return success(res.ctx, newValue);
+        }
+        catch (e) {
+            console.trace('Error while mapping: ', e);
             return failure(res.ctx, 'Error while mapping', ['map']);
         }
-        return success(res.ctx, newValue);
     }
 }
 
@@ -325,12 +327,12 @@ export class ParseError extends Error {
         let row = 0;
         while (index > 0) {
             if (lines[row].length > index) {
-                return [lines[row], index + 1, row];
+                return [lines[row], index + 1, row + 1];
             }
             index -= lines[row].length + 1;
             row += 1;
         }
-        return [lines[row], index + 1, row];
+        return [lines[row], index + 1, row + 1];
     }
 }
 

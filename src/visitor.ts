@@ -1,4 +1,4 @@
-import { ASTStatement } from '../language/interfaces';
+import { ASTStatement } from './language/interfaces';
 
 type Indexable = {
   [key: string]: unknown;
@@ -29,5 +29,12 @@ export function visit<T extends ASTStatement['kind']>(kind: T, fn: Visitor<T>, n
     }
   }
   if (node.kind === kind) return fn(node as ConcreteASTStatement<T>, parent);
+  return node;
+}
+
+export function visitTable<T extends ASTStatement['kind']>(kind: T[], fn: Visitor<T>, node: ASTStatement, parent: ASTStatement | undefined): ASTStatement {
+  kind.forEach(k => {
+    node = visit(k, fn, node, parent);
+  });
   return node;
 }

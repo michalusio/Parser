@@ -1,7 +1,7 @@
 import { between, map, oneOrMany, opt, Parser, seq, spacesPlus, str, wspaces } from '../parser/parser';
 import { functionName, functionReturnType, parameterName, parameterType } from './core';
 import { FunctionDeclaration, Parameter } from './interfaces';
-import { lines } from './statements/code-statements';
+import { scope } from './statements/code-statements';
 
 function parameter(): Parser<Parameter> {
   return map(seq(wspaces, parameterType, wspaces, parameterName, wspaces), ([, type, , name]) => ({ kind: 'parameter', name, type }));
@@ -18,8 +18,8 @@ export function functionDeclaration(): Parser<FunctionDeclaration> {
           wspaces,
           between(str('('), opt(parameters), str(')')),
           wspaces,
-          between(seq(wspaces, str('{')), lines, seq(wspaces, str('}')))
+          scope()
       ),
-      ([type, , name, , params, , lines]) => ({kind: 'function', type, name, params: params ?? [], body: lines})
+      ([type, , name, , params, , scope]) => ({kind: 'function', type, name, params: params ?? [], body: scope})
   );
 }

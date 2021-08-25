@@ -18,5 +18,11 @@ export function arithmeticVisitor(node: ArithmeticStatement): ASTStatement {
       value: operators[node.operator](node.left.value, node.right.value),
     };
   }
+  if (node.left.kind === 'stringValue' && node.right.kind === 'stringValue' && node.operator === '+') {
+    return {
+      kind: 'stringValue',
+      value: node.left.value + node.right.value,
+    };
+  }
   return node;
 }

@@ -1,0 +1,25 @@
+{
+    "name": "micha-language-extension",
+    "displayName": "Micha Language Extension",
+    "description": "",
+    "version": "0.0.1",
+    "engines": {
+        "vscode": "^1.59.0"
+    },
+    "categories": [
+        "Programming Languages"
+    ],
+    "contributes": {
+        "languages": [{
+            "id": "micha-lang",
+            "aliases": ["Micha Language", "micha-lang"],
+            "extensions": [".micha"],
+            "configuration": "./language-configuration.json"
+        }],
+        "grammars": [{
+            "language": "micha-lang",
+            "scopeName": "script.micha",
+            "path": "./syntaxes/micha-lang.tmLanguage.json"
+        }]
+    }
+}
