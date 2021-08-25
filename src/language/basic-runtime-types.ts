@@ -1,1 +1,1 @@
-export const basicRuntimeTypes = ['int', 'long', 'string', 'real'];
+export const basicRuntimeTypes = ['int', 'long', 'bool', 'string', 'real'];

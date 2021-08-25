@@ -1,6 +1,7 @@
 import {
   any,
   between,
+  boolP,
   Context,
   expect,
   intP,
@@ -19,6 +20,7 @@ import {
 import { parameterName } from '../core';
 import {
   ArithmeticStatement,
+  BoolValueStatement,
   IndexingStatement,
   IntValueStatement,
   LStatement,
@@ -79,6 +81,7 @@ export function methodCall(): Parser<MethodCallStatement> {
 
 const intStatement: Parser<IntValueStatement> = map(intP, i => ({ kind: 'intValue', value: i }));
 const realStatement: Parser<RealValueStatement> = map(realP, i => ({ kind: 'realValue', value: i }));
+const boolStatement: Parser<BoolValueStatement> = map(boolP, i => ({ kind: 'boolValue', value: i }));
 const stringStatement: Parser<StringValueStatement> = map(
   between(str('"'), regex(/(?:[^\n\\"]|(?:\\(?:"|n|r|t|b|f|v|0|'|\\|(?:x[0-9a-fA-F][0-9a-fA-F]))))*/, 'String content'), str('"')),
   str => ({
@@ -105,7 +108,7 @@ function operator<T extends string>(op: T): Parser<T> {
 const addSubSeparator = any(operator('+'), operator('-'));
 const mulDivSeparator = any(operator('*'), operator('/'));
 
-const anyNormalRStatement = any(realStatement, intStatement, stringStatement, methodCall(), lStatement());
+const anyNormalRStatement = any(realStatement, intStatement, boolStatement, stringStatement, methodCall(), lStatement());
 
 export function rStatement(): Parser<RStatement> {
   return expect(expr(), 'R statement');

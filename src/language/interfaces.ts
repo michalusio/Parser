@@ -68,6 +68,11 @@ export type RealValueStatement = Readonly<{
   value: number
 }>;
 
+export type BoolValueStatement = Readonly<{
+  kind: 'boolValue',
+  value: boolean
+}>;
+
 export type StringValueStatement = Readonly<{
   kind: 'stringValue',
   value: string
@@ -83,6 +88,7 @@ export type RStatement =
 IntValueStatement |
 RealValueStatement |
 StringValueStatement |
+BoolValueStatement |
 LStatement |
 MethodCallStatement |
 ArithmeticStatement;

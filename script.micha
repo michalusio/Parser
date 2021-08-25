@@ -2,7 +2,7 @@ string someFunctionName(string param1, SomeObject param2, int param3) {
   int a;
   int c = a;
 }
-
+// comments?
 string anotherFunction() {
   string lmao;
   lmao[2] = invoke.test;
@@ -10,7 +10,7 @@ string anotherFunction() {
   {
     invoke.test = do.something();
     lmao.test(invoke(), 5 + 3 + 8 * 2);
-    a.b().c[2].d().x = "1" + "abc";
+    a.b().c[2].d().x = "1" + "abc" - true + false;
   } else {
     a();
   }

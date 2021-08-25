@@ -1,20 +1,115 @@
 {
 	"$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
 	"name": "Micha Language",
-	"patterns": [
-		{
-			"include": "#keywords"
-		},
-		{
-			"include": "#strings"
-		}
-	],
+	"patterns": [{ "include": "#functionDeclaration" }, { "include": "#objectDeclaration" }, { "include": "#expression" }],
 	"repository": {
+		"expression": {
+      "patterns": [
+				{ "include": "#keywords" },
+				{ "include": "#booleanLiteral" },
+				{ "include": "#strings" },
+				{ "include": "#paren-expression" },
+				{ "include": "#bracket-expression" },
+				{ "include": "#comment"},
+				{ "include": "#let" },
+				{ "include": "#words" }
+			]
+    },
+		"words": {
+			"name": "support.type.property-name.micha-lang",
+			"match": "\\w"
+		},
+		"let": {
+			"begin": "(\\w+) (\\w+) *(?=.*;)(?!{)",
+			"end": ";",
+			"beginCaptures": {
+				"1": { "name": "entity.name.type" },
+				"2": { "name": "entity.name.tag" }
+			},
+			"patterns": [{"include": "#expression"}]
+		},
+		"objectDeclaration": {
+			"begin": "(\\w+) (\\w+) *{",
+			"end": "}",
+			"beginCaptures": {
+				"1": { "name": "entity.name.tag" },
+				"2": { "name": "entity.name.type" }
+			},
+			"patterns": [{"include": "#expression"}]
+		},
+		"functionDeclaration": {
+			"begin": "(\\w+) (\\w+)\\(",
+			"end": "\\)",
+			"beginCaptures": {
+				"1": { "name": "meta.return-type entity.name.type" },
+				"2": { "name": "entity.name.function" }
+			},
+			"patterns": [{"include": "#functionParams"}]
+		},
+		"functionParams": {
+			"begin": "",
+			"end": ",? *(\\w+) (\\w+) *",
+			"beginCaptures": {
+				"1": { "name": "meta.return-type entity.name.type" },
+				"2": { "name": "support.type.property-name.micha-lang" }
+			},
+			"endCaptures": {
+				"1": { "name": "meta.return-type entity.name.type" },
+				"2": { "name": "support.type.property-name.micha-lang" }
+			},
+			"patterns": [{"include": "#functionParams"}]
+		},
 		"keywords": {
-			"patterns": [{
-				"name": "keyword.control.micha-lang",
-				"match": "\\b(if|while|for|return)\\b"
-			}]
+			"patterns": [
+				{
+					"name": "keyword.control.micha-lang",
+					"match": "\\b(if|else)\\b"
+				},
+				{
+					"name": "constant.numeric.micha-lang",
+					"match": "\\b\\d\\b"
+				},
+				{
+					"name": "keyword.operator.micha-lang",
+					"match": "\\b(\\+|-|\\*|\\/)\\b"
+				}
+			]
+		},
+		"booleanLiteral": {
+			"patterns": [
+				{
+					"name": "constant.language.boolean.true.ts",
+					"match": "(?<!\\.|\\$)\\btrue\\b(?!\\$)"
+				},
+				{
+					"name": "constant.language.boolean.false.ts",
+					"match": "(?<!\\.|\\$)\\bfalse\\b(?!\\$)"
+				}
+			]
+		},
+		"paren-expression": {
+		  "begin": "\\(",
+		  "end": "\\)",
+		  "beginCaptures": {
+				"0": { "name": "punctuation.paren.open" }
+		  },
+		  "endCaptures": {
+				"0": { "name": "punctuation.paren.close" }
+		  },
+		  "name": "expression.group",
+		  "patterns": [{ "include": "#expression" }]
+		},
+		"bracket-expression": {
+		  "begin": "{",
+		  "end": "}",
+		  "beginCaptures": {
+				"0": { "name": "punctuation.brack.open" }
+		  },
+		  "endCaptures": {
+				"0": { "name": "punctuation.brack.close" }
+		  },
+		  "name": "expression.group",
+		  "patterns": [{ "include": "#expression" }]
 		},
 		"strings": {
 			"name": "string.quoted.double.micha-lang",
@@ -26,6 +121,10 @@
 					"match": "\\\\."
 				}
 			]
+		},
+		"comment": {
+			"name": "comment.line.double-slash.micha-lang",
+			"match": "//.*$"
 		}
 	},
 	"scopeName": "source.micha"
