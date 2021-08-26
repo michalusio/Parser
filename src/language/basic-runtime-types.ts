@@ -1,9 +1,11 @@
 function withSize(type: string, sizes: number[]): string[] {
-  const types = [];
-  for (const size of sizes) {
-      types.push(`${type}${size}`);
-  }
-  return types;
+  return sizes.map(size => `${type}${size}`);
 }
 
-export const basicRuntimeTypes = ['bool', 'string', ...withSize('int', [8, 16, 32, 64]), ...withSize('real', [32, 64])];
+export const basicRuntimeTypes = [
+  'bool',
+  'string',
+  ...withSize('int', [8, 16, 32, 64]),
+  ...withSize('uint', [8, 16, 32, 64]),
+  ...withSize('real', [32, 64])
+];

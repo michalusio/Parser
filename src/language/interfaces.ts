@@ -29,8 +29,15 @@ export type Parameter = Readonly<{
   type: string;
 }>;
 
+export type ImportDeclaration = Readonly<{
+  kind: 'import',
+  path: string;
+  node: Program;
+}>;
+
 export type Program = Readonly<{
   kind: 'program';
+  imports: ImportDeclaration[];
   nodes: Declaration[];
 }>;
 
@@ -119,4 +126,4 @@ export type IndexingStatement = Readonly<{
 
 export type LStatement = VariableStatement | PropertyStatement | IndexingStatement;
 
-export type ASTStatement = Statement | RStatement | Declaration | Program | Property | Parameter;
+export type ASTStatement = Statement | RStatement | Declaration | Program | Property | Parameter | ImportDeclaration;

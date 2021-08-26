@@ -81,7 +81,7 @@ export function methodCall(): Parser<MethodCallStatement> {
 const intStatement: Parser<IntValueStatement> = map(intP, i => ({ kind: 'intValue', value: i }));
 const realStatement: Parser<RealValueStatement> = map(realP, i => ({ kind: 'realValue', value: i }));
 const boolStatement: Parser<BoolValueStatement> = map(boolP, i => ({ kind: 'boolValue', value: i }));
-const stringStatement: Parser<StringValueStatement> = map(
+export const stringStatement: Parser<StringValueStatement> = map(
   between(str('"'), regex(/(?:[^\n\\"]|(?:\\(?:"|n|r|t|b|f|v|0|'|\\|(?:x[0-9a-fA-F][0-9a-fA-F]))))*/, 'String content'), str('"')),
   str => ({
     kind: 'stringValue',

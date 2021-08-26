@@ -1,3 +1,5 @@
+import * as fs from 'fs';
+
 const DEBUG = false;
 let lastErrorMsg = '';
 
@@ -5,6 +7,7 @@ export type Parser<T> = (ctx: Context) => Result<T>;
 
 export type Context = Readonly<{
   text: string;
+  path: string;
   index: number;
 }>;
 
@@ -35,7 +38,7 @@ function success<T>(ctx: Context, value: T): Success<T> {
     return { success: true, value, ctx };
 }
 
-function failure(ctx: Context, expected: string, history: string[]): Failure {
+export function failure(ctx: Context, expected: string, history: string[]): Failure {
     if (DEBUG) {
         const errorMsg = `Expected ${expected} at index ${ctx.index}`;
         if (errorMsg !== lastErrorMsg) {
@@ -301,13 +304,14 @@ export function ref<T>(parser: Parser<T>, check: ((p: T) => boolean), expected: 
     }
 }
 
-export function Parse<T>(input: string, parser: Parser<T>): T {
-    const res = parser({text: input, index: 0});
+export function Parse<T>(path: string, parser: Parser<T>): T {
+    const text = fs.readFileSync(path, 'utf8');
+    const res = parser({text, path, index: 0});
     if (isFailure(res)) {
-        throw new ParseError(`Parse error, expected ${[...res.history].pop()} at char ${res.ctx.index}`, input, res.ctx.index, res.history);
+        throw new ParseError(`Parse error, expected ${[...res.history].pop()} at char ${res.ctx.index}`, text, res.ctx.index, res.history);
     }
-    if (res.ctx.index !== input.length) {
-        throw new ParseError(`Parse error at index ${res.ctx.index}`, input, res.ctx.index, []);
+    if (res.ctx.index !== text.length) {
+        throw new ParseError(`Parse error at index ${res.ctx.index}`, text, res.ctx.index, []);
     }
     return res.value;
 }
@@ -336,9 +340,9 @@ export class ParseError extends Error {
     }
 }
 
-export function ParseShowErrors<T>(input: string, parser: Parser<T>): T | null {
+export function ParseShowErrors<T>(path: string, parser: Parser<T>): T | null {
     try {
-        return Parse(input, parser);
+        return Parse(path, parser);
     }
     catch (e: unknown) {
         if (e instanceof ParseError) {

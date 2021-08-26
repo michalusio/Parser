@@ -1,0 +1,6 @@
+import "./script3.mlang";
+
+string someFunctionName() {
+  int16 a;
+  int16 c = a;
+}

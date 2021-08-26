@@ -64,7 +64,7 @@
 			"patterns": [
 				{
 					"name": "keyword.control.m-lang",
-					"match": "\\b(if|else)\\b"
+					"match": "\\b(if|else|import)\\b"
 				},
 				{
 					"name": "constant.numeric.m-lang",
