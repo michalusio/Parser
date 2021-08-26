@@ -1,9 +1,0 @@
-import "./script2.mlang";
-import "./script3.mlang";
-
-// comments?
-type SomeObject {
-  int32 id;
-  int64 userId;
-  string someData;
-}
