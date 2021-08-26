@@ -8,9 +8,6 @@
     "skipLibCheck": true,
     "alwaysStrict": true,
     "declaration": true,
-    "declarationMap": true,
-    "importHelpers": true,
-    "sourceMap": false,
     "strict": true,
     "lib": ["ES2020"]
   },
