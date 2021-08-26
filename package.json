@@ -1,8 +1,10 @@
 {
   "name": "parser-combinators",
   "version": "1.0.0",
-  "license": "MIT",
-  "maintainers": [ "micha_i" ],
+  "license": "ISC",
+  "maintainers": [
+    "Micha_i"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/michalusio/Parser"
@@ -13,7 +15,7 @@
     "start": "tsc && node .",
     "lint": "eslint . --ext .ts"
   },
-  "author": "Micha_i",
+  "author": "Micha_i <isalski.michal@gmail.com> (https://github.com/michalusio)",
   "dependencies": {},
   "devDependencies": {
     "@types/node": "^14.14.13",
