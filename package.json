@@ -16,12 +16,13 @@
   "description": "A library of parser combinators, with which you can create your own parsers. The library will be continuously improved in time.",
   "scripts": {
     "build": "npm install && npm run lint && tsc",
+    "postbuild": "copy package.json dist && copy README.md dist",
     "start": "tsc && node .",
     "lint": "eslint . --ext .ts"
   },
   "author": "Micha_i <isalski.michal@gmail.com> (https://github.com/michalusio)",
-  "main": "./dist/parser.js",
-  "types": "./dist/parser.d.ts",
+  "main": "./parser.js",
+  "types": "./parser.d.ts",
   "dependencies": {},
   "devDependencies": {
     "@types/node": "^14.14.13",
