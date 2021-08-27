@@ -15,7 +15,7 @@
   "homepage": "https://github.com/michalusio/Parser",
   "description": "A library of parser combinators, with which you can create your own parsers. The library will be continuously improved in time.",
   "scripts": {
-    "build": "npm install && npm run lint && tsc",
+    "build": "tsc",
     "postbuild": "copy package.json dist && copy README.md dist",
     "start": "tsc && node .",
     "lint": "eslint . --ext .ts",
