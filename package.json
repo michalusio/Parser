@@ -16,7 +16,10 @@
   "description": "A library of parser combinators, with which you can create your own parsers. The library will be continuously improved in time.",
   "scripts": {
     "build": "tsc",
-    "postbuild": "copy package.json dist && copy README.md dist",
+    "publishing:prepare": "copy package.json dist && copy README.md dist && cd dist",
+    "publishing:patch": "npm version patch && npm run publishing:prepare && npm publish",
+    "publishing:minor": "npm version minor && npm run publishing:prepare && npm publish",
+    "publishing:major": "npm version major && npm run publishing:prepare && npm publish",
     "start": "tsc && node .",
     "lint": "eslint . --ext .ts",
     "test": "cross-env TS_NODE_PROJECT=tsconfig.spec.json mocha"
