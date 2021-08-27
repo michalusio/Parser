@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
-    "outDir": "dist",
-    "rootDir": "src",
+    "outDir": "dist-tests",
+    "rootDir": "tests",
     "target": "es2020",
     "module": "CommonJS",
     "noEmitOnError": true,
@@ -11,5 +11,5 @@
     "strict": true,
     "lib": ["ES2020"]
   },
-  "include": ["./src/**/*"],
+  "include": ["./tests/**/*", "./src/**/*"],
 }

@@ -1,8 +1,12 @@
 node_modules
 src
+tests
+.mocharc.json
 .vscode
 .env
 .eslintignore
 .eslintrc
 .gitignore
 tsconfig.json
+tsconfig.eslint.json
+tsconfig.spec.json
