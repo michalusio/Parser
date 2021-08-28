@@ -9,14 +9,14 @@ As of now it contains the following combinators:
     * `any`
     * `between`
     * `exhaust`
-    * `many`
+    * `many` (and `zeroOrMany`, `oneOrMany`, `oneOrManyRed`)
     * `map`
-    * `opt`
+    * `opt`ional
     * `regex`
-    * `seq`
-    * `str`
+    * `seq`uence
+    * `str`ing
 * Utility combinators:
-    * `ref`
+    * `ref`er
     * `expect`
 * Ready-made value combinators:
     * `spaces`
@@ -25,3 +25,6 @@ As of now it contains the following combinators:
     * `bool` (and `boolP`)
     * `int` (and `intP`)
     * `real` (and `realP`)
+
+
+[![CI](https://github.com/michalusio/Parser/actions/workflows/CI.yml/badge.svg?branch=master)](https://github.com/michalusio/Parser/actions/workflows/CI.yml)

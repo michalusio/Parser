@@ -13,6 +13,7 @@ export function seq<T, U, V, W, X>(...parsers: [Parser<T>, Parser<U>, Parser<V>,
 export function seq<T, U, V, W>(...parsers: [Parser<T>, Parser<U>, Parser<V>, Parser<W>]): Parser<[T, U, V, W]>
 export function seq<T, U, V>(...parsers: [Parser<T>, Parser<U>, Parser<V>]): Parser<[T, U, V]>
 export function seq<T, U>(...parsers: [Parser<T>, Parser<U>]): Parser<[T, U]>
+export function seq<T>(...parsers: [Parser<T>]): Parser<[T]>
 export function seq<T>(...parsers: Parser<T>[]): Parser<T[]> {
     return (ctx: Context): Result<T[]> => {
         const values: T[] = [];

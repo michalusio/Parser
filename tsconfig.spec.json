@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "outDir": "dist-tests",
-    "rootDir": "tests",
+    "rootDir": "./",
     "target": "es2020",
     "module": "CommonJS",
     "noEmitOnError": true,
