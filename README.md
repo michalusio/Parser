@@ -11,13 +11,13 @@ A library of parser combinators, with which you can create your own parsers.
 
 - Replacing complicated regular expressions with easy-to-understand parsers
 - Incorporating custom languages into your application
-- Being a good tool for introducing higher-order functions and parsing
+- Introducing higher-order functions and parsing concepts
 
 #### This package:
 
 - Will be continuously improved in time
 - Has full TypeScript support and is made with `strict` mode on
-- It's made in the _Simplicity first_ philosophy
+- Is made in the _Simplicity first_ philosophy
 
 ##### As of now it contains the following combinators:
 
