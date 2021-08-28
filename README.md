@@ -1,6 +1,7 @@
 ## Parser Combinators
 
 [![CI](https://github.com/michalusio/Parser/actions/workflows/CI.yml/badge.svg?branch=master)](https://github.com/michalusio/Parser/actions/workflows/CI.yml)
+[![CodeQL](https://github.com/michalusio/Parser/actions/workflows/codeql-analysis.yml/badge.svg?branch=master)](https://github.com/michalusio/Parser/actions/workflows/codeql-analysis.yml)
 [![npm version](https://badge.fury.io/js/parser-combinators.svg)](https://badge.fury.io/js/parser-combinators)
 [![stable](http://badges.github.io/stability-badges/dist/stable.svg)](http://github.com/badges/stability-badges)
 
