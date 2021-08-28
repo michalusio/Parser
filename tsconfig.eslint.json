@@ -1,14 +1,14 @@
 {
   "compilerOptions": {
     "rootDir": "./",
-    "target": "es2020",
+    "target": "es2019",
     "module": "CommonJS",
     "noEmitOnError": true,
     "skipLibCheck": true,
     "alwaysStrict": true,
     "declaration": true,
     "strict": true,
-    "lib": ["ES2020"]
+    "lib": ["ES2019"]
   },
   "include": ["./tests/**/*", "./src/**/*"],
 }
