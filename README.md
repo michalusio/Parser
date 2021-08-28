@@ -8,43 +8,47 @@
 A library of parser combinators, with which you can create your own parsers.
 
 #### Parser combinators can be used for:
-* Replacing complicated regular expressions with easy-to-understand parsers
-* Incorporating custom languages into your application
-* Being a good tool for introducing higher-order functions and parsing
+
+- Replacing complicated regular expressions with easy-to-understand parsers
+- Incorporating custom languages into your application
+- Being a good tool for introducing higher-order functions and parsing
 
 #### This package:
-* Will be continuously improved in time
-* Has full TypeScript support and is made with `strict` mode on
-* It's made in the _Simplicity first_ philosophy
+
+- Will be continuously improved in time
+- Has full TypeScript support and is made with `strict` mode on
+- It's made in the _Simplicity first_ philosophy
 
 ##### As of now it contains the following combinators:
-* Standard combinators:
-    * `any`
-    * `between`
-    * `exhaust`
-    * `many` (and `zeroOrMany`, `oneOrMany`, `oneOrManyRed`)
-    * `map`
-    * `opt`ional
-    * `regex`
-    * `seq`uence
-    * `str`ing
-* Utility combinators:
-    * `ref`er
-    * `expect`
-* Ready-made value combinators:
-    * `spaces`
-    * `spacesPlus`
-    * `wspaces`
-    * `bool` (and `boolP`)
-    * `int` (and `intP`)
-    * `real` (and `realP`)
+
+- Standard combinators:
+  - `any`
+  - `between`
+  - `exhaust`
+  - `many` (and `zeroOrMany`, `oneOrMany`, `oneOrManyRed`)
+  - `map`
+  - `opt`ional
+  - `regex`
+  - `seq`uence
+  - `str`ing
+- Utility combinators:
+  - `ref`er
+  - `expect`
+- Ready-made value combinators:
+  - `spaces`
+  - `spacesPlus`
+  - `wspaces`
+  - `bool` (and `boolP`)
+  - `int` (and `intP`)
+  - `real` (and `realP`)
 
 ### Example usage:
+
 ##### Using standard combinators:
 
     import { seq, str, any } from 'parser-combinators/parsers';
     import { ParseText } from 'parser-combinators';
-    
+
     const parser = seq(str('a'), any(str('b'), str('c')));
     const result = ParseText('ab', parser); // Will return ['a', 'b']
 
@@ -52,7 +56,7 @@ A library of parser combinators, with which you can create your own parsers.
 
     import { wspaces, str, realP, map } from 'parser-combinators/parsers';
     import { ParseText } from 'parser-combinators';
-    
+
     const parser = map(
         seq(wspaces, str('number:'), wspaces, realP, wspaces),
         ([,,, data]) => data
@@ -63,7 +67,7 @@ A library of parser combinators, with which you can create your own parsers.
 
     import { wspaces, str, realP, map } from 'parser-combinators/parsers';
     import { ParseText } from 'parser-combinators';
-    
+
     const parser = ref(
         map(
             seq(wspaces, str('number:'), wspaces, realP, wspaces),
