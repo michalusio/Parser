@@ -18,9 +18,10 @@ A library of parser combinators, with which you can create your own parsers.
 
 #### This package:
 
-- Will be continuously improved in time
 - Has full TypeScript support and is made with `strict` mode on
+- Is thoroughly tested
 - Is made in the _Simplicity first_ philosophy
+- Will be continuously improved in time
 
 ##### As of now it contains the following combinators:
 

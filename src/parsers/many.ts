@@ -8,16 +8,16 @@ import { seq } from './seq';
  */
 export function many<T>(parser: Parser<T>): Parser<T[]> {
   return (ctx: Context): Result<T[]> => {
-      const results: T[] = [];
-      // eslint-disable-next-line no-constant-condition
-      while (true) {
-          const res = parser(ctx);
-          if (isFailure(res)) {
-              return success(ctx, results);
-          }
-          ctx = res.ctx;
-          results.push(res.value);
-      }
+    const results: T[] = [];
+    // eslint-disable-next-line no-constant-condition
+    while (true) {
+        const res = parser(ctx);
+        if (isFailure(res)) {
+            return success(ctx, results);
+        }
+        ctx = res.ctx;
+        results.push(res.value);
+    }
   }
 }
 
@@ -33,16 +33,16 @@ export function zeroOrMany<T, V>(item: Parser<T>, separator: Parser<V>): Parser<
  */
 export function oneOrMany<T, V>(item: Parser<T>, separator: Parser<V>): Parser<T[]> {
   return (ctx: Context): Result<T[]> => {
-      const res = map(
-          seq(item, many(map(seq(separator, item), ([, t]) => t))),
-          ([t, ts]) => ([t, ...ts])
-      )(ctx);
-      if (isFailure(res)) {
-          const newHistory = [...res.history];
-          newHistory.splice(0, 2);
-          return failure(res.ctx, res.expected, ['oneOrMany', ...newHistory]);
-      }
-      return res;
+    const res = map(
+        seq(item, many(map(seq(separator, item), ([, t]) => t))),
+        ([t, ts]) => ([t, ...ts])
+    )(ctx);
+    if (isFailure(res)) {
+        const newHistory = [...res.history];
+        newHistory.splice(0, 2);
+        return failure(res.ctx, res.expected, ['oneOrMany', ...newHistory]);
+    }
+    return res;
   }
 }
 
@@ -51,16 +51,16 @@ export function oneOrMany<T, V>(item: Parser<T>, separator: Parser<V>): Parser<T
  */
 export function oneOrManyRed<T, V, U = T>(item: Parser<T>, separator: Parser<V>, reducer: (left: U | T, right: T, sep: V) => U): Parser<U | T> {
   return map(
-      map(
-          seq(map(item, (x) => (<[V | null, T]>[null, x])), many<[V | null, T]>(seq(separator, item))),
-          ([t, ts]) => ([t, ...ts])
-      ),
-      ts => {
-          let result: U | T = ts[0][1];
-          for (let i = 1; i < ts.length; i++) {
-              result = reducer(result, ts[i][1], ts[i][0] as V);
-          }
-          return result;
-      }
+    map(
+        seq(map(item, (x) => (<[V | null, T]>[null, x])), many<[V | null, T]>(seq(separator, item))),
+        ([t, ts]) => ([t, ...ts])
+    ),
+    ts => {
+        let result: U | T = ts[0][1];
+        for (let i = 1; i < ts.length; i++) {
+            result = reducer(result, ts[i][1], ts[i][0] as V);
+        }
+        return result;
+    }
   );
 }

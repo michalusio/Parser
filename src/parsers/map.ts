@@ -12,7 +12,6 @@ export function map<A, B>(parser: Parser<A>, mapper: (val: A) => B): Parser<B> {
           return success(res.ctx, newValue);
       }
       catch (e) {
-          console.trace('Error while mapping: ', e);
           return failure(res.ctx, 'Error while mapping', ['map']);
       }
   }
