@@ -2,7 +2,7 @@
 
 [![Node.js CI](https://github.com/michalusio/Parser/actions/workflows/CI.yml/badge.svg?branch=master)](https://github.com/michalusio/Parser/actions/workflows/CI.yml)
 [![CodeQL](https://github.com/michalusio/Parser/actions/workflows/codeql-analysis.yml/badge.svg?branch=master)](https://github.com/michalusio/Parser/actions/workflows/codeql-analysis.yml)
-[![Code Coverage](https://codecov.io/github/michalusio/Parser?branch=master)](https://codecov.io/)
+[![codecov](https://codecov.io/gh/michalusio/Parser/branch/master/graph/badge.svg?token=GWIWKBDVD4)](https://codecov.io/gh/michalusio/Parser)
 
 
 [![NPM Version](https://badge.fury.io/js/parser-combinators.svg)](https://badge.fury.io/js/parser-combinators)
