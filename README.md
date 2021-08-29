@@ -1,9 +1,11 @@
 ## Parser Combinators
 
-[![CI](https://github.com/michalusio/Parser/actions/workflows/CI.yml/badge.svg?branch=master)](https://github.com/michalusio/Parser/actions/workflows/CI.yml)
+[![Node.js CI](https://github.com/michalusio/Parser/actions/workflows/CI.yml/badge.svg?branch=master)](https://github.com/michalusio/Parser/actions/workflows/CI.yml)
 [![CodeQL](https://github.com/michalusio/Parser/actions/workflows/codeql-analysis.yml/badge.svg?branch=master)](https://github.com/michalusio/Parser/actions/workflows/codeql-analysis.yml)
-[![npm version](https://badge.fury.io/js/parser-combinators.svg)](https://badge.fury.io/js/parser-combinators)
-[![stable](http://badges.github.io/stability-badges/dist/stable.svg)](http://github.com/badges/stability-badges)
+[![Code Coverage](https://codecov.io/github/michalusio/Parser?branch=master)](https://codecov.io/)
+[![NPM Version](https://badge.fury.io/js/parser-combinators.svg)](https://badge.fury.io/js/parser-combinators)
+[![Stable](http://badges.github.io/stability-badges/dist/stable.svg)](http://github.com/badges/stability-badges)
+[![No Dependencies](https://status.david-dm.org/gh/michalusio/parser.svg)](https://status.david-dm.org/)
 
 A library of parser combinators, with which you can create your own parsers.
 

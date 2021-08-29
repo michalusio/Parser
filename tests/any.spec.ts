@@ -1,6 +1,6 @@
 import * as assert from 'assert';
 
-import { any, regex, str } from '../src/parsers';
+import { any, regex, seq, str } from '../src/parsers';
 import { Context, isFailure } from '../src/types';
 import { sanitize } from './sanitization';
 
@@ -69,6 +69,30 @@ describe('any', function() {
       // Arrange
       const ctx: Context = { text: 'xasf', index: 0, path: '' };
       const parser = any(str(' '));
+
+      // Act
+      const result = parser(ctx);
+
+      // Assert
+      assert.ok(isFailure(result));
+    });
+
+    it(`case: any(seq(str('x'), str('b')), seq(str('a'))) -> 'xasf'`, () => {
+      // Arrange
+      const ctx: Context = { text: 'xasf', index: 0, path: '' };
+      const parser = any(seq(str('x'), str('b')), seq(str('a')));
+
+      // Act
+      const result = parser(ctx);
+
+      // Assert
+      assert.ok(isFailure(result));
+    });
+
+    it(`case: any(seq(str('a')), seq(str('x'), str('b'))) -> 'xasf'`, () => {
+      // Arrange
+      const ctx: Context = { text: 'xasf', index: 0, path: '' };
+      const parser = any(seq(str('a')), seq(str('x'), str('b')));
 
       // Act
       const result = parser(ctx);

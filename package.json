@@ -22,7 +22,9 @@
     "publishing:major": "npm version major && npm run publishing:prepare",
     "start": "tsc && node .",
     "lint": "eslint . --ext .ts",
-    "test": "cross-env TS_NODE_PROJECT=tsconfig.spec.json mocha"
+    "test:unit": "cross-env TS_NODE_PROJECT=tsconfig.spec.json mocha",
+    "test": "nyc -e '.ts' --r html -r lcov -r text npm run test:unit",
+    "test:report": "nyc report --reporter=json > coverage/coverage.json"
   },
   "author": "Micha_i <isalski.michal@gmail.com> (https://github.com/michalusio)",
   "main": "./parser.js",
@@ -35,7 +37,9 @@
     "@typescript-eslint/parser": "^4.14.2",
     "cross-env": "^7.0.3",
     "eslint": "^7.15.0",
+    "istanbul": "1.1.0-alpha.1",
     "mocha": "^9.1.0",
+    "nyc": "^15.1.0",
     "ts-node": "^10.2.1",
     "typescript": "^4.2.4"
   },
