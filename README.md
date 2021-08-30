@@ -3,8 +3,8 @@
 ![GitHub Workflow Status (branch)](https://img.shields.io/github/workflow/status/michalusio/Parser/CI/master)
 [![CodeQL](https://github.com/michalusio/Parser/actions/workflows/codeql-analysis.yml/badge.svg?branch=master)](https://github.com/michalusio/Parser/actions/workflows/codeql-analysis.yml)
 ![Codecov](https://img.shields.io/codecov/c/github/michalusio/Parser)
-![NPM](https://img.shields.io/npm/l/parser-combinators)
 
+![NPM](https://img.shields.io/npm/l/parser-combinators)
 [![NPM Version](https://badge.fury.io/js/parser-combinators.svg)](https://badge.fury.io/js/parser-combinators)
 [![No Dependencies](https://status.david-dm.org/gh/michalusio/parser.svg)](https://status.david-dm.org/)
 
