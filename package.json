@@ -12,7 +12,7 @@
   "bugs": {
     "url": "https://github.com/michalusio/Parser/issues"
   },
-  "homepage": "https://github.com/michalusio/Parser",
+  "homepage": "https://github.com/michalusio/Parser#readme",
   "description": "A library of parser combinators, with which you can create your own parsers. The library will be continuously improved in time.",
   "scripts": {
     "build": "tsc",
@@ -49,6 +49,7 @@
     "combinator",
     "parser-combinator",
     "parsing",
-    "combining"
+    "combining",
+    "functional"
   ]
 }
