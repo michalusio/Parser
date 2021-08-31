@@ -32,11 +32,12 @@ export function zeroOrMany<T, V>(item: Parser<T>, separator: Parser<V>): Parser<
  * @returns A parser returning an array of many parses, omitting the separator.
  */
 export function oneOrMany<T, V>(item: Parser<T>, separator: Parser<V>): Parser<T[]> {
+  const sequencer = map(
+    seq(item, many(map(seq(separator, item), ([, t]) => t))),
+    ([t, ts]) => ([t, ...ts])
+  );
   return (ctx: Context): Result<T[]> => {
-    const res = map(
-        seq(item, many(map(seq(separator, item), ([, t]) => t))),
-        ([t, ts]) => ([t, ...ts])
-    )(ctx);
+    const res = sequencer(ctx);
     if (isFailure(res)) {
         const newHistory = [...res.history];
         newHistory.splice(0, 2);

@@ -13,7 +13,8 @@ describe('str', function() {
     'asdfghjkl',
     'qwertyuiop',
     '\n\n\n\n',
-    'Lazy fox\njumps over\na lazy dog'
+    'Lazy fox\njumps over\na lazy dog',
+    'a'
   ];
 
   describe('should return the requested value with the content\'s index at the end of text', () => {
@@ -61,6 +62,17 @@ describe('str', function() {
       // Arrange
       const context: Context = { text: 'test string', index: 0, path: '' };
       const parser = str('some other value');
+
+      // Act
+      const result = parser(context);
+
+      // Assert
+      assert.ok(isFailure(result));
+    });
+    it('when the value is not equal 2', () => {
+      // Arrange
+      const context: Context = { text: 'test string', index: 0, path: '' };
+      const parser = str('x');
 
       // Act
       const result = parser(context);

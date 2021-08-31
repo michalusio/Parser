@@ -1,3 +1,5 @@
+import { readFileSync } from 'fs';
+
 export const json_sample1k = "[\r\n" +
     "  {\r\n" +
     "    \"_id\": \"5789f4e5688f478d31e213cb\",\r\n" +
@@ -990,3 +992,5 @@ export const json_sample1k = "[\r\n" +
     "    \"favoriteFruit\": \"banana\"\r\n" +
     "  }\r\n" +
     "]";
+
+export const json_sample_huge: string = readFileSync('tests/large-file.json', { encoding: 'utf-8' });
