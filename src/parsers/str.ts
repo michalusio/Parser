@@ -5,7 +5,7 @@ import { Context, failure, Parser, Result, success } from '../types';
  */
 export function str<T extends string>(match: T): Parser<T> {
     return (ctx: Context): Result<T> => {
-      if (ctx.text.substr(ctx.index, match.length) === match){
+      if (ctx.text.startsWith(match, ctx.index)){
           return success({ ...ctx, index: ctx.index + match.length}, match);
       }
       else {

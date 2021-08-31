@@ -4,13 +4,15 @@ import { Context, failure, Parser, Result, success } from '../types';
  * @returns A parser parsing a given regex and returning a match.
  */
 export function regex(match: RegExp | string, expected: string): Parser<string> {
-  return (ctx: Context): Result<string> => {
-      const regexMatch = ctx.text.substr(ctx.index).match(match);
-      if (regexMatch !== undefined && regexMatch !== null && regexMatch.index === 0) {
-          return success({...ctx, index: ctx.index + regexMatch[0].length}, ctx.text.substr(ctx.index, regexMatch[0].length))
-      }
-      else {
-          return failure(ctx, expected, [expected]);
-      }
-  }
+    const regexp = new RegExp(match, 'y');
+    return (ctx: Context): Result<string> => {
+        regexp.lastIndex = ctx.index;
+        const regexMatch = regexp.exec(ctx.text);
+        if (regexMatch !== null && regexMatch.index === ctx.index) {
+            return success({...ctx, index: ctx.index + regexMatch[0].length}, regexMatch[0]);
+        }
+        else {
+            return failure(ctx, expected, [expected]);
+        }
+    }
 }
