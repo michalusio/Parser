@@ -79,5 +79,5 @@ describe('JSON', function() {
 
         // Assert
         assert.ok(!isFailure(result));
-    }).timeout(10000);
+    }).timeout(25000);
 });
