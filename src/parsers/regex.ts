@@ -4,7 +4,7 @@ import { Context, failure, Parser, Result, success } from '../types';
  * @returns A parser parsing a given regex and returning a match.
  */
 export function regex(match: RegExp | string, expected: string): Parser<string> {
-    const regexp = new RegExp(match, 'y');
+    const regexp = new RegExp(match, typeof match === 'string' ? 'y' : match.flags+'y');
     return (ctx: Context): Result<string> => {
         regexp.lastIndex = ctx.index;
         const regexMatch = regexp.exec(ctx.text);

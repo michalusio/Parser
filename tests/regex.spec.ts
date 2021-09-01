@@ -11,7 +11,8 @@ describe('regex', function() {
     const testCases = [
       { rgx: /\w+/, from: 'test string', to: 'test' },
       { rgx: /\w+/, from: 'rgavon_gtenqig 123', to: 'rgavon_gtenqig' },
-      { rgx: /\s*?data: .+?\s+/, from: '  \n data: something data2  \t ', to: '  \n data: something ' }
+      { rgx: /\s*?data: .+?\s+/, from: '  \n data: something data2  \t ', to: '  \n data: something ' },
+      { rgx: 'data', from: 'data test', to: 'data' }
     ];
     testCases.forEach(({ rgx, from, to }) => {
       it(`case: ${sanitize(rgx)}: '${sanitize(from)}' -> '${sanitize(to)}'`, () => {
@@ -35,7 +36,8 @@ describe('regex', function() {
     const testCases = [
       { rgx: /12345/, from: 'test string' },
       { rgx: /\D+/, from: '12345' },
-      { rgx: /\s*?data: .+?\s+/, from: '  \n data2: data  \t ' }
+      { rgx: /\s*?data: .+?\s+/, from: '  \n data2: data  \t ' },
+      { rgx: 'data', from: 'datu test' }
     ];
     testCases.forEach(({ rgx, from }) => {
       it(`case: ${sanitize(rgx)}: '${sanitize(from)}'`, () => {
