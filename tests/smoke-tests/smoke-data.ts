@@ -993,4 +993,4 @@ export const json_sample1k = "[\r\n" +
     "  }\r\n" +
     "]";
 
-export const json_sample_huge: string = readFileSync('tests/large-file.json', { encoding: 'utf-8' });
+export const json_sample_huge: string = readFileSync('tests/smoke-tests/large-file.json', { encoding: 'utf-8' });

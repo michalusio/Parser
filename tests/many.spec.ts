@@ -77,6 +77,21 @@ describe('zeroOrMany', function() {
 
 describe('oneOrMany', function() {
   describe('should match one or more parses', () => {
+    it(`case: oneOrMany(str('a')) -> 'aaa'`, () => {
+      // Arrange
+      const ctx: Context = { text: 'aaa', index: 0, path: '' };
+      const parser = oneOrMany(str('a'));
+
+      // Act
+      const result = parser(ctx);
+
+      // Assert
+      assert.ok(!isFailure(result));
+
+      assert.deepStrictEqual(result.value, ['a', 'a', 'a']);
+      assert.deepStrictEqual(result.ctx, { text: 'aaa', index: 3, path: '' });
+    });
+
     it(`case: oneOrMany(str('a'), str(',')) -> 'a,a,a'`, () => {
       // Arrange
       const ctx: Context = { text: 'a,a,a', index: 0, path: '' };

@@ -27,8 +27,8 @@
     "test:report": "nyc report --reporter=json > coverage/coverage.json && codecov"
   },
   "author": "Micha_i <isalski.michal@gmail.com> (https://github.com/michalusio)",
-  "main": "./parser.js",
-  "types": "./parser.d.ts",
+  "main": "./index.js",
+  "types": "./index.d.ts",
   "dependencies": {},
   "devDependencies": {
     "@types/mocha": "^9.0.0",

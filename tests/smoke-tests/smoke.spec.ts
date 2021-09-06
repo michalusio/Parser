@@ -1,7 +1,7 @@
 import * as assert from 'assert';
 
-import { any, between, boolP, map, oneOrMany, regex, seq, str, wspaces } from '../src/parsers';
-import { Context, isFailure, Parser, Result } from '../src/types';
+import { any, between, boolP, map, oneOrMany, regex, seq, str, wspaces } from '../../src/parsers';
+import { Context, isFailure, Parser, Result } from '../../src/types';
 import { json_sample1k, json_sample_huge } from './smoke-data';
 
 type ValueType = JSONObject | ValueType[] | string | number | boolean | null;

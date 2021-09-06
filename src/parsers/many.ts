@@ -31,9 +31,12 @@ export function zeroOrMany<T, V>(item: Parser<T>, separator: Parser<V>): Parser<
 /** Parses one or more occurences of the given parser, separated with the separator parser.
  * @returns A parser returning an array of many parses, omitting the separator.
  */
-export function oneOrMany<T, V>(item: Parser<T>, separator: Parser<V>): Parser<T[]> {
+export function oneOrMany<T, V>(item: Parser<T>, separator: Parser<V> | undefined = undefined): Parser<T[]> {
   const sequencer = map(
-    seq(item, many(map(seq(separator, item), ([, t]) => t))),
+    seq(item, many(separator
+      ? map(seq(separator, item), ([, t]) => t)
+      : item
+      )),
     ([t, ts]) => ([t, ...ts])
   );
   return (ctx: Context): Result<T[]> => {
