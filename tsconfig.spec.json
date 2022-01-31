@@ -12,5 +12,5 @@
     "strict": true,
     "lib": ["ES2019"]
   },
-  "include": ["./tests/**/*", "./src/**/*"],
+  "include": ["./src/**/*"],
 }

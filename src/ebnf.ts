@@ -1,4 +1,4 @@
-import { any, between, exhaust, many, map, oneOrMany, oneOrManyRed, regex, seq, str, wspaces } from './parsers';
+import { any, between, exhaust, expect, expectErase, many, map, oneOrMany, oneOrManyRed, regex, seq, str, surely, wspaces } from './parsers';
 import { Context, Parser, Result } from './types';
 
 export type Identifier = Readonly<{
@@ -45,58 +45,77 @@ export type Rule = Readonly<{
 
 const letter = regex(/[a-zA-Z]/, 'letter');
 const digit = regex(/[0-9]/, 'digit');
-const generalSymbols = regex(/[[\]{}()<>=|.,:;-]| /, 'generalSymbols');
-const symbolForDoubleQuote = any(generalSymbols, regex(/'|(?:\\")/, 'symbol'));
-const symbolForSingleQuote = any(generalSymbols, regex(/"|(?:\\')/, 'symbol'));
-const characterForDoubleQuote = any(letter, digit, symbolForDoubleQuote, str('_'));
-const characterForSingleQuote = any(letter, digit, symbolForSingleQuote, str('_'));
+const generalSymbols = regex(/[[\]{}()<>=|.,:;\-_]/, 'generalSymbols');
+const whiteSpace = expectErase(any(
+  str(' '),
+  map(str('\\n'), () => '\n'),
+  map(str('\\t'), () => '\t'),
+  map(str('\\r'), () => '\r'),
+  map(str('\\f'), () => '\f'),
+  map(str('\\v'), () => '\v'),
+  map(str('\\b'), () => '\b'),
+  map(str('\\0'), () => '\0'),
+  map(str('\\\\'), () => '\\')
+), 'whitespace');
+const characterForDoubleQuote = expectErase(any(letter, digit, generalSymbols, regex(/'|(?:\\")/, 'symbol'), whiteSpace), "character-for-double-quote");
+const characterForSingleQuote = expectErase(any(letter, digit, generalSymbols, regex(/"|(?:\\')/, 'symbol'), whiteSpace), "character-for-single-quote");
 
-const identifier: Parser<Identifier> = map(
+const identifier: Parser<Identifier> = expectErase(map(
   seq(letter, many(any(letter, digit, str('_')))),
   ([first, rest]) => ({ kind: 'identifier', name: first + rest.join('')})
-);
+), "identifier");
 
 const terminal: Parser<Terminal> = map(any(
-  between(str("'"), oneOrMany(characterForSingleQuote), str("'")),
-  between(str('"'), oneOrMany(characterForDoubleQuote), str('"'))
+  expect(between(str("'"), oneOrMany(characterForSingleQuote), str("'")), "terminal-single-quote"),
+  expect(between(str('"'), oneOrMany(characterForDoubleQuote), str('"')), "terminal-double-quote")
 ), value => ({ kind: 'terminal', value: value.join('') }));
 
 function normalRhs(): Parser<RuleResult> {
   return (ctx: Context): Result<RuleResult> =>
-  any(
+  expect(any(
     identifier,
     terminal,
-    map(between(str('['), rhs(), str(']')), value => <Optional>({ kind: 'optional', value})),
-    map(between(str('{'), rhs(), str('}')), value => <Many>({ kind: 'many', value})),
-    map(between(str('('), rhs(), str(')')), value => <Group>({ kind: 'group', value}))
-  )(ctx);
+    expect(map(between(str('['), surely(rhs()), str(']')), value => <Optional>({ kind: 'optional', value})), 'optional'),
+    expect(map(between(str('{'), surely(rhs()), str('}')), value => <Many>({ kind: 'many', value})), 'many'),
+    expect(map(between(str('('), surely(rhs()), str(')')), value => <Group>({ kind: 'group', value})), 'group')
+  ), 'any-rhs')(ctx);
 }
 
-function rhs(): Parser<RuleResult> {
+function concatRhs(): Parser<RuleResult> {
   return (ctx: Context): Result<RuleResult> =>
-  between(
-    wspaces,
-    oneOrManyRed(normalRhs(), between(wspaces, any(str('|'), str(',')), wspaces), (left, right, sep) => {
-      if (sep === '|') {
-        return <Alternation>({ kind: 'alternation', values: [
-          ...(left.kind === 'alternation' ? left.values : [left]),
-          right
-        ] });
-      }
-      else {
+  expect(
+    between(
+      wspaces,
+      oneOrManyRed(normalRhs(), between(wspaces, str(','), wspaces), (left, right) => {
         return <Concatenation>({ kind: 'concatenation', values: [
           ...(left.kind === 'concatenation' ? left.values : [left]),
           right
         ] });
-      }
-    }),
-    wspaces
-  )(ctx);
+      }),
+      wspaces
+    ),
+    'concatenation-rhs')(ctx);
+}
+
+function rhs(): Parser<RuleResult> {
+  return (ctx: Context): Result<RuleResult> =>
+  expect(
+    between(
+      wspaces,
+      oneOrManyRed(concatRhs(), between(wspaces, str('|'), wspaces), (left, right) => {
+        return <Alternation>({ kind: 'alternation', values: [
+          ...(left.kind === 'alternation' ? left.values : [left]),
+          right
+        ] });
+      }),
+      wspaces
+    ),
+  'alternation-rhs')(ctx);
 }
 
 const rule: Parser<Rule> = map(
-  seq(identifier, wspaces, str('='), wspaces, rhs(), wspaces, str(';'), wspaces),
-  ([lhs,,,, rhs]) => ({ identifier: lhs, result: rhs })
+  seq(wspaces, identifier, wspaces, str('='), wspaces, rhs(), wspaces, str(';'), wspaces),
+  ([,lhs,,,, rhs]) => ({ identifier: lhs, result: rhs })
 );
 
-export const grammar = exhaust(rule);
+export const EBNFParser = exhaust(rule);

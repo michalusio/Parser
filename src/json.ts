@@ -1,8 +1,5 @@
-import * as assert from 'assert';
-
-import { any, between, boolP, map, oneOrMany, regex, seq, str, wspaces } from '../../src/parsers';
-import { Context, isFailure, Parser, Result } from '../../src/types';
-import { json_sample1k, json_sample_huge } from './smoke-data';
+import { any, between, boolP, map, oneOrMany, regex, seq, str, wspaces } from "./parsers";
+import { Context, Parser, Result } from "./types";
 
 type ValueType = JSONObject | ValueType[] | string | number | boolean | null;
 type JSONObject = { [key: string]: ValueType };
@@ -55,29 +52,4 @@ function element(): Parser<ValueType> {
     return (ctx: Context): Result<ValueType> => elementInside(ctx);
 }
 
-const JSONParser = element();
-
-describe('JSON', function() {
-    it(`should parse a 1K file`, () => {
-        // Arrange
-        const ctx: Context = { text: json_sample1k, index: 0, path: '' };
-
-        // Act
-        const result = JSONParser(ctx);
-
-        // Assert
-        assert.ok(!isFailure(result));
-        assert.strictEqual(JSON.stringify(result.value, null, 2), json_sample1k.replace(/\r/g, ''));
-    });
-
-    it(`should parse a huge file`, () => {
-        // Arrange
-        const ctx: Context = { text: json_sample_huge, index: 0, path: '' };
-
-        // Act
-        const result = JSONParser(ctx);
-
-        // Assert
-        assert.ok(!isFailure(result));
-    }).timeout(25000);
-});
+export const JSONParser = element();

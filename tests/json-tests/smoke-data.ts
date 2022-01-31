@@ -1,6 +1,6 @@
 import { readFileSync } from 'fs';
 
-export const json_sample1k = "[\r\n" +
+const json_sample1k_1 = "[\r\n" +
     "  {\r\n" +
     "    \"_id\": \"5789f4e5688f478d31e213cb\",\r\n" +
     "    \"index\": 0,\r\n" +
@@ -112,7 +112,8 @@ export const json_sample1k = "[\r\n" +
     "    \"longitude\": 1.30236,\r\n" +
     "    \"tags\": [\r\n" +
     "      \"Lorem\",\r\n" +
-    "      \"eu\",\r\n" +
+    "      \"eu\",\r\n";
+const json_sample1k_2 =
     "      \"occaecat\",\r\n" +
     "      \"duis\",\r\n" +
     "      \"ut\",\r\n" +
@@ -269,7 +270,8 @@ export const json_sample1k = "[\r\n" +
     "      }\r\n" +
     "    ],\r\n" +
     "    \"greeting\": \"Hello, Pate Horn! You have 4 unread messages.\",\r\n" +
-    "    \"favoriteFruit\": \"strawberry\"\r\n" +
+    "    \"favoriteFruit\": \"strawberry\"\r\n";
+const json_sample1k_3 =
     "  },\r\n" +
     "  {\r\n" +
     "    \"_id\": \"5789f4e5e067da500003a41e\",\r\n" +
@@ -450,7 +452,8 @@ export const json_sample1k = "[\r\n" +
     "    ],\r\n" +
     "    \"greeting\": \"Hello, Victoria Hicks! You have 4 unread messages.\",\r\n" +
     "    \"favoriteFruit\": \"strawberry\"\r\n" +
-    "  },\r\n" +
+    "  },\r\n";
+const json_sample1k_4 =
     "  {\r\n" +
     "    \"_id\": \"5789f4e5cb20ad8e57ceea4d\",\r\n" +
     "    \"index\": 10,\r\n" +
@@ -649,7 +652,8 @@ export const json_sample1k = "[\r\n" +
     "    \"about\": \"Qui quis dolore laborum magna et veniam fugiat quis incididunt aute. Tempor sunt laboris aliquip esse nulla eu incididunt sit sint. Tempor labore veniam pariatur ullamco eu fugiat laborum.\\r\\n\",\r\n" +
     "    \"registered\": \"2014-06-13T12:29:58 -03:00\",\r\n" +
     "    \"latitude\": 24.572164,\r\n" +
-    "    \"longitude\": -166.514278,\r\n" +
+    "    \"longitude\": -166.514278,\r\n";
+const json_sample1k_5 =
     "    \"tags\": [\r\n" +
     "      \"in\",\r\n" +
     "      \"enim\",\r\n" +
@@ -829,7 +833,8 @@ export const json_sample1k = "[\r\n" +
     "    \"about\": \"Non velit magna sunt magna et anim sit. Sit consequat eu labore et anim incididunt eu et in sint laboris pariatur est magna. Non consequat reprehenderit excepteur incididunt sit voluptate do in incididunt mollit proident commodo. Elit do fugiat incididunt laborum. Veniam deserunt laborum sit minim sint. Excepteur adipisicing commodo labore irure commodo mollit nisi ad aliquip. Irure cupidatat irure do enim elit ex est.\\r\\n\",\r\n" +
     "    \"registered\": \"2016-01-19T09:51:10 -02:00\",\r\n" +
     "    \"latitude\": -54.575181,\r\n" +
-    "    \"longitude\": 84.036429,\r\n" +
+    "    \"longitude\": 84.036429,\r\n";
+const json_sample1k_6 =
     "    \"tags\": [\r\n" +
     "      \"pariatur\",\r\n" +
     "      \"officia\",\r\n" +
@@ -993,4 +998,5 @@ export const json_sample1k = "[\r\n" +
     "  }\r\n" +
     "]";
 
-export const json_sample_huge: string = readFileSync('tests/smoke-tests/large-file.json', { encoding: 'utf-8' });
+export const json_sample1k = json_sample1k_1 + json_sample1k_2 + json_sample1k_3 + json_sample1k_4 + json_sample1k_5 + json_sample1k_6;
+export const json_sample_huge: string = readFileSync('tests/json-tests/large-file.json', { encoding: 'utf-8' });

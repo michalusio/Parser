@@ -38,6 +38,8 @@ A library of parser combinators, with which you can create your own parsers.
 - Utility combinators:
   - `ref`er
   - `expect`
+  - `expectErase`
+  - `surely`
 - Ready-made value combinators:
   - `spaces`
   - `spacesPlus`
@@ -45,6 +47,9 @@ A library of parser combinators, with which you can create your own parsers.
   - `bool` (and `boolP`)
   - `int` (and `intP`)
   - `real` (and `realP`)
+- Whole parsers:
+  - Extended Backus-Naur Form (`EBNF`)
+  - JavaScript Object Notation (`JSON`)
 
 ### Example usage:
 

@@ -1,3 +1,5 @@
+wspace = " ";
+wspaces = { wspace } ;
 letter = "A" | "B" | "C" | "D" | "E" | "F" | "G"
        | "H" | "I" | "J" | "K" | "L" | "M" | "N"
        | "O" | "P" | "Q" | "R" | "S" | "T" | "U"
@@ -7,22 +9,21 @@ letter = "A" | "B" | "C" | "D" | "E" | "F" | "G"
        | "q" | "r" | "s" | "t" | "u" | "v" | "w"
        | "x" | "y" | "z" ;
 digit = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" ;
-symbol = "[" | "]" | "{" | "}" | "(" | ")" | "<" | ">"
-       | "'" | '"' | "=" | "|" | "." | "," | ";" ;
-character = letter | digit | symbol | "_" ;
+symbol = "[" | "]" | "{" | "}" | "(" | ")" | "<" | ">" | "=" | "|" | "." | "," | ";" | "\\" | " " | "_" ;
+character = letter | digit | symbol ;
  
 identifier = letter , { letter | digit | "_" } ;
 terminal = "'" , character , { character } , "'" 
          | '"' , character , { character } , '"' ;
  
 lhs = identifier ;
-rhs = identifier
-     | terminal
-     | "[" , rhs , "]"
-     | "{" , rhs , "}"
-     | "(" , rhs , ")"
-     | rhs , "|" , rhs
-     | rhs , "," , rhs ;
+normalRHS = identifier
+       | terminal
+       | "[", wspaces, rhs, wspaces, "]"
+       | "{", wspaces, rhs, wspaces, "}"
+       | "(", wspaces, rhs, wspaces, ")" ;
+concatRHS = normalRHS, wspaces, ",", wspaces, normalRHS ;
+rhs = concatRHS, wspaces, "|", wspaces, concatRHS;
 
-rule = lhs , "=" , rhs , ";" ;
+rule = wspaces, lhs, wspaces, "=", wspaces, rhs, wspaces, ";", wspaces ;
 grammar = { rule } ;
