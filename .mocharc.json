@@ -1,10 +1,5 @@
 {
   "require": "ts-node/register",
   "extensions": ["ts", "tsx"],
-  "spec": [
-    "tests/ebnf-tests/*.spec.ts"
-  ],
-  "watch-files": [
-    "src"
-  ]
+  "watch-files": ["src"]
 }

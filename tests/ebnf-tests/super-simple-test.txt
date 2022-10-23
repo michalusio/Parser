@@ -1,7 +1,0 @@
-block example_func arg1 arg2
-    if (arg2)
-        return arg3
-    end
-
-    return arg2
-end

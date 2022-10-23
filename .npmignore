@@ -9,6 +9,7 @@ coverage
 .eslintignore
 .eslintrc
 .gitignore
+.github
 tsconfig.json
 tsconfig.eslint.json
 tsconfig.spec.json
