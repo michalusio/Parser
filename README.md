@@ -6,7 +6,6 @@
 
 ![NPM](https://img.shields.io/npm/l/parser-combinators)
 [![NPM Version](https://badge.fury.io/js/parser-combinators.svg)](https://badge.fury.io/js/parser-combinators)
-[![No Dependencies](https://status.david-dm.org/gh/michalusio/parser.svg)](https://status.david-dm.org/)
 
 A library of parser combinators, with which you can create your own parsers.
 
