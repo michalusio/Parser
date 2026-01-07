@@ -25,6 +25,9 @@
   "author": "Micha_i <isalski.michal@gmail.com> (https://github.com/michalusio)",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "engines": {
+    "node": ">=18"
+  },
   "devDependencies": {
     "@types/mocha": "10.0.10",
     "@types/node": "25.0.3",
