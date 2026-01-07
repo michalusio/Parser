@@ -43,4 +43,4 @@ jobs:
         token: ${{ secrets.GITHUB_TOKEN }}
         slug: "michalusio/parser"
       env:
-        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+        CODECOV_TOKEN: ${{ secrets.CODECOV }}
