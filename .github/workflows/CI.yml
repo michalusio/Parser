@@ -41,6 +41,6 @@ jobs:
       uses: codecov/codecov-action@v5
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
-        slug: michalusio/Parser
+        slug: "michalusio/parser"
       env:
         CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
