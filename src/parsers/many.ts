@@ -9,7 +9,6 @@ import { seq } from './seq';
 export function many<T>(parser: Parser<T>): Parser<T[]> {
   return (ctx: Context): Result<T[]> => {
     const results: T[] = [];
-    // eslint-disable-next-line no-constant-condition
     while (true) {
         const res = parser(ctx);
         if (isFailure(res)) {

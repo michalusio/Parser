@@ -11,7 +11,7 @@ export function map<A, B>(parser: Parser<A>, mapper: (val: A) => B): Parser<B> {
           const newValue = mapper(res.value);
           return success(res.ctx, newValue);
       }
-      catch (e) {
+      catch {
           return failure(res.ctx, 'Error while mapping', ['map']);
       }
   }

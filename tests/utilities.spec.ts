@@ -1,6 +1,6 @@
 import * as assert from 'assert';
 
-import { expect, ref, str } from '../src/parsers';
+import { expect, expectErase, ref, str } from '../src/parsers';
 import { Context, isFailure } from '../src/types';
 
 describe('expect', function() {
@@ -34,6 +34,41 @@ describe('expect', function() {
       assert.ok(isFailure(result));
 
       assert.deepStrictEqual(result.history, ['a letter', 'a']);
+    });
+  });
+});
+
+describe('expectErase', function() {
+  describe('should pass the parser result', () => {
+    it(`case: expectErase(expect(str('a'), 'a letter'), 'x letter') -> 'abc'`, () => {
+      // Arrange
+      const ctx: Context = { text: 'abc', index: 0, path: '' };
+      const parser = expectErase(expect(str('a'), 'a letter'), 'x letter');
+
+      // Act
+      const result = parser(ctx);
+
+      // Assert
+      assert.ok(!isFailure(result));
+
+      assert.deepStrictEqual(result.value, 'a');
+      assert.deepStrictEqual(result.ctx, { text: 'abc', index: 1, path: '' });
+    });
+  });
+
+  describe('should pass the parser fail and not add the alternative expected value', () => {
+    it(`case: expectErase(expect(str('a'), 'a letter'), 'x letter') -> 'bcd'`, () => {
+      // Arrange
+      const ctx: Context = { text: 'bcd', index: 0, path: '' };
+      const parser = expectErase(expect(str('a'), 'a letter'), 'x letter');
+
+      // Act
+      const result = parser(ctx);
+
+      // Assert
+      assert.ok(isFailure(result));
+
+      assert.deepStrictEqual(result.history, ['x letter']);
     });
   });
 });
@@ -73,6 +108,20 @@ describe('ref', function() {
   });
 
   describe('should fail on check', () => {
+    it(`case: ref(str('a'), () => false) -> 'acd'`, () => {
+      // Arrange
+      const ctx: Context = { text: 'acd', index: 0, path: '' };
+      const parser = ref(str('a'), () => false);
+
+      // Act
+      const result = parser(ctx);
+
+      // Assert
+      assert.ok(isFailure(result));
+
+      assert.deepStrictEqual(result.history, ['ref: check']);
+    });
+
     it(`case: ref(str('a'), () => false, 'ref') -> 'acd'`, () => {
       // Arrange
       const ctx: Context = { text: 'acd', index: 0, path: '' };

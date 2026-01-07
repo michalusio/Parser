@@ -6,7 +6,6 @@ import { Context, failure, isFailure, Parser, Result, success } from '../types';
 export function exhaust<T,V>(parser: Parser<T>, until: Parser<V> | null = null): Parser<T[]> {
   return (ctx: Context): Result<T[]> => {
       const results: T[] = [];
-      // eslint-disable-next-line no-constant-condition
       while (true) {
           const res = parser(ctx);
           if (isFailure(res)) {

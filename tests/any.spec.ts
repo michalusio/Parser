@@ -1,6 +1,6 @@
 import * as assert from 'assert';
 
-import { any, regex, seq, str } from '../src/parsers';
+import { any, regex, seq, str, surely } from '../src/parsers';
 import { Context, isFailure } from '../src/types';
 import { sanitize } from './sanitization';
 
@@ -111,6 +111,34 @@ describe('any', function() {
 
       // Assert
       assert.ok(isFailure(result));
+    });
+
+    it(`case: any(surely(str('b')), str('a')) -> 'abc'`, () => {
+      // Arrange
+      const ctx: Context = { text: 'abc', index: 0, path: '' };
+      const parser = any(surely(str('b')), str('a'));
+
+      // Act
+      const result = parser(ctx);
+
+      // Assert
+      assert.ok(isFailure(result));
+      assert.deepEqual(result.history, ['b']);
+    });
+
+    describe('with longest expected history', () => {
+      it(`case: any(seq(str('b')), str('c')) -> 'abc'`, () => {
+        // Arrange
+        const ctx: Context = { text: 'abc', index: 0, path: '' };
+        const parser = any(seq(str('b')), str('c'));
+
+        // Act
+        const result = parser(ctx);
+
+        // Assert
+        assert.ok(isFailure(result));
+        assert.deepEqual(result.history, ['any', 'seq', 'b']);
+      });
     });
   });
 });

@@ -23,7 +23,6 @@ export function any<T>(...parsers: Parser<T>[]): Parser<T> {
             const res = parser(ctx);
             if (isFailure(res)) {
                 if (res.history.includes('surely')) {
-                    console.log('shot');
                     return failure(res.ctx, res.expected, res.history.filter(h => h !== 'surely'));
                 }
                 expected.push(res);

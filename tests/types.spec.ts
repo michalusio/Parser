@@ -137,7 +137,7 @@ describe('fail', function() {
 });
 
 describe('ParseError', function() {
-  it(`case 1`, () => {
+  it(`some reason (line 1, col 4):\\ntext\\n---^`, function() {
     // Arrange
     const ctx = { text: 'text\nsecond text', path: '', index: 3 };
 
@@ -145,10 +145,10 @@ describe('ParseError', function() {
     const error = new ParseError('some reason', ctx.text, ctx.index, []);
 
     // Assert
-    assert.deepStrictEqual(error.getPrettyErrorMessage(), `some reason (line 1, col 4)\ntext\n   ^`);
+    assert.deepStrictEqual(error.getPrettyErrorMessage(), this.test!.title.replaceAll('\\n', '\n'));
   });
 
-  it(`case 2`, () => {
+  it(`some reason (line 2, col 11):\\nsecond text\\n----------^`, function() {
     // Arrange
     const ctx = { text: 'text\nsecond text\nthird text!', path: '', index: 15 };
 
@@ -156,10 +156,10 @@ describe('ParseError', function() {
     const error = new ParseError('some reason', ctx.text, ctx.index, []);
 
     // Assert
-    assert.deepStrictEqual(error.getPrettyErrorMessage(), `some reason (line 2, col 11)\nsecond text\n          ^`);
+    assert.deepStrictEqual(error.getPrettyErrorMessage(), this.test!.title.replaceAll('\\n', '\n'));
   });
 
-  it(`case 3`, () => {
+  it(`some reason (line 3, col 0):\\nthird text!\\n^`, function() {
     // Arrange
     const ctx = { text: 'text\nsecond text\nthird text!', path: '', index: 16 };
 
@@ -167,6 +167,6 @@ describe('ParseError', function() {
     const error = new ParseError('some reason', ctx.text, ctx.index, []);
 
     // Assert
-    assert.deepStrictEqual(error.getPrettyErrorMessage(), `some reason (line 3, col 0)\nthird text!\n^`);
+    assert.deepStrictEqual(error.getPrettyErrorMessage(), this.test!.title.replaceAll('\\n', '\n'));
   });
 });

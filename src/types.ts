@@ -65,6 +65,6 @@ export class ParseError extends Error {
   }
 
   public getPrettyErrorMessage(): string {
-    return `${this.message} (line ${this.row}, col ${this.column})\n${this.line}\n${(this.column ? ' '.repeat(this.column - 1) : '') + '^'}`;
+    return `${this.message} (line ${this.row}, col ${this.column}):\n${this.line}\n${(this.column > 0 ? '-'.repeat(this.column - 1) : '') + '^'}`;
   }
 }

@@ -2,14 +2,14 @@
   "compilerOptions": {
     "outDir": "dist",
     "rootDir": "src",
-    "target": "es2019",
+    "target": "es2021",
     "module": "CommonJS",
     "noEmitOnError": true,
     "skipLibCheck": true,
     "alwaysStrict": true,
     "declaration": true,
     "strict": true,
-    "lib": ["ES2019"]
+    "lib": ["es2021"]
   },
   "include": ["./src/**/*"],
 }
