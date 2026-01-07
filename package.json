@@ -19,8 +19,7 @@
     "start": "tsc && node .",
     "lint": "eslint . --ext .ts",
     "test:unit": "cross-env TS_NODE_PROJECT=tsconfig.spec.json mocha tests/**/*.ts",
-    "test": "nyc -e '.ts' --r html -r lcov -r text npm run test:unit",
-    "test:report": "nyc report --reporter=json > coverage/coverage.json"
+    "test": "nyc -e '.ts' --r html -r lcov --reporter=text-lcov -r text npm run test:unit"
   },
   "author": "Micha_i <isalski.michal@gmail.com> (https://github.com/michalusio)",
   "main": "./dist/index.js",
