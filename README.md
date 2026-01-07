@@ -1,6 +1,6 @@
 ## Parser Combinators
 
-[![GitHub Workflow Status (branch)](https://img.shields.io/github/workflow/status/michalusio/Parser/CI/master)](https://img.shields.io/github/actions/workflow/status/michalusio/Parser/.github/workflows/CI.yml?branch=main)
+[![CI](https://github.com/michalusio/Parser/actions/workflows/CI.yml/badge.svg)](https://github.com/michalusio/Parser/actions/workflows/CI.yml)
 [![CodeQL](https://github.com/michalusio/Parser/actions/workflows/codeql-analysis.yml/badge.svg?branch=master)](https://github.com/michalusio/Parser/actions/workflows/codeql-analysis.yml)
 ![Codecov](https://img.shields.io/codecov/c/github/michalusio/Parser)
 
