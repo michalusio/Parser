@@ -1,7 +1,72 @@
 import * as assert from 'assert';
 
-import { expect, expectErase, ref, str } from '../src/parsers';
+import { expect, expectErase, lookaround, ref, str, token } from '../src/parsers';
 import { Context, isFailure } from '../src/types';
+
+describe('ref', function() {
+  describe('should pass the parser result', () => {
+    it(`case: ref(str('a'), () => true, 'ref') -> 'abc'`, () => {
+      // Arrange
+      const ctx: Context = { text: 'abc', index: 0, path: '' };
+      const parser = ref(str('a'), () => true, 'ref');
+
+      // Act
+      const result = parser(ctx);
+
+      // Assert
+      assert.ok(!isFailure(result));
+
+      assert.deepStrictEqual(result.value, 'a');
+      assert.deepStrictEqual(result.ctx, { text: 'abc', index: 1, path: '' });
+    });
+  });
+
+  describe('should pass the parser fail', () => {
+    it(`case: ref(str('a'), () => true, 'ref') -> 'bcd'`, () => {
+      // Arrange
+      const ctx: Context = { text: 'bcd', index: 0, path: '' };
+      const parser = ref(str('a'), () => true, 'ref');
+
+      // Act
+      const result = parser(ctx);
+
+      // Assert
+      assert.ok(isFailure(result));
+
+      assert.deepStrictEqual(result.history, [ 'a' ]);
+    });
+  });
+
+  describe('should fail on check', () => {
+    it(`case: ref(str('a'), () => false) -> 'acd'`, () => {
+      // Arrange
+      const ctx: Context = { text: 'acd', index: 0, path: '' };
+      const parser = ref(str('a'), () => false);
+
+      // Act
+      const result = parser(ctx);
+
+      // Assert
+      assert.ok(isFailure(result));
+
+      assert.deepStrictEqual(result.history, ['ref: check']);
+    });
+
+    it(`case: ref(str('a'), () => false, 'ref') -> 'acd'`, () => {
+      // Arrange
+      const ctx: Context = { text: 'acd', index: 0, path: '' };
+      const parser = ref(str('a'), () => false, 'ref');
+
+      // Act
+      const result = parser(ctx);
+
+      // Assert
+      assert.ok(isFailure(result));
+
+      assert.deepStrictEqual(result.history, ['ref: ref']);
+    });
+  });
+});
 
 describe('expect', function() {
   describe('should pass the parser result', () => {
@@ -73,12 +138,12 @@ describe('expectErase', function() {
   });
 });
 
-describe('ref', function() {
+describe('token', function() {
   describe('should pass the parser result', () => {
-    it(`case: ref(str('a'), () => true, 'ref') -> 'abc'`, () => {
+    it(`case: token(str('a')) -> 'a'`, () => {
       // Arrange
       const ctx: Context = { text: 'abc', index: 0, path: '' };
-      const parser = ref(str('a'), () => true, 'ref');
+      const parser = token(str('a'));
 
       // Act
       const result = parser(ctx);
@@ -86,16 +151,18 @@ describe('ref', function() {
       // Assert
       assert.ok(!isFailure(result));
 
-      assert.deepStrictEqual(result.value, 'a');
+      assert.deepStrictEqual(result.value.start, 0);
+      assert.deepStrictEqual(result.value.end, 1);
+      assert.deepStrictEqual(result.value.value, 'a');
       assert.deepStrictEqual(result.ctx, { text: 'abc', index: 1, path: '' });
     });
   });
 
-  describe('should pass the parser fail', () => {
-    it(`case: ref(str('a'), () => true, 'ref') -> 'bcd'`, () => {
+  describe('should pass the parser fail and not add anything', () => {
+    it(`case: token(str('a')) -> 'bcd'`, () => {
       // Arrange
       const ctx: Context = { text: 'bcd', index: 0, path: '' };
-      const parser = ref(str('a'), () => true, 'ref');
+      const parser = token(str('a'));
 
       // Act
       const result = parser(ctx);
@@ -103,37 +170,39 @@ describe('ref', function() {
       // Assert
       assert.ok(isFailure(result));
 
-      assert.deepStrictEqual(result.history, [ 'a' ]);
+      assert.deepStrictEqual(result.history, ['a']);
+    });
+  });
+});
+
+describe('lookaround', function() {
+  describe('should pass but not move the index', () => {
+    it(`case: lookaround(str('a')) -> 'abc'`, () => {
+      // Arrange
+      const ctx: Context = { text: 'abc', index: 0, path: '' };
+      const parser = lookaround(str('a'));
+
+      // Act
+      const result = parser(ctx);
+
+      // Assert
+      assert.ok(!isFailure(result));
+      assert.deepStrictEqual(result.ctx, { text: 'abc', index: 0, path: '' });
     });
   });
 
-  describe('should fail on check', () => {
-    it(`case: ref(str('a'), () => false) -> 'acd'`, () => {
+  describe('should fail', () => {
+    it(`case: lookaround(str('a')) -> 'bcd'`, () => {
       // Arrange
-      const ctx: Context = { text: 'acd', index: 0, path: '' };
-      const parser = ref(str('a'), () => false);
+      const ctx: Context = { text: 'bcd', index: 0, path: '' };
+      const parser = lookaround(str('a'));
 
       // Act
       const result = parser(ctx);
 
       // Assert
       assert.ok(isFailure(result));
-
-      assert.deepStrictEqual(result.history, ['ref: check']);
-    });
-
-    it(`case: ref(str('a'), () => false, 'ref') -> 'acd'`, () => {
-      // Arrange
-      const ctx: Context = { text: 'acd', index: 0, path: '' };
-      const parser = ref(str('a'), () => false, 'ref');
-
-      // Act
-      const result = parser(ctx);
-
-      // Assert
-      assert.ok(isFailure(result));
-
-      assert.deepStrictEqual(result.history, ['ref: ref']);
+      assert.deepStrictEqual(result.history, ['lookaround', 'a']);
     });
   });
 });

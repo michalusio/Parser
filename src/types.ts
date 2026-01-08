@@ -21,6 +21,15 @@ export type Failure = Readonly<{
   history: string[];
 }>;
 
+export type TokenRange = {
+    start: number, 
+    end: number
+}
+
+export type Token<T> = TokenRange & {
+    value: T
+};
+
 export function isFailure(input: unknown): input is Failure {
     return !(input as Failure).success;
 }

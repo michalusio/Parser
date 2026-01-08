@@ -2,7 +2,7 @@ import 'mocha';
 
 import * as assert from 'assert';
 
-import { bool, boolP, int, intP, real, realP, spaces, spacesPlus, wspaces } from '../src/parsers';
+import { bool, boolP, eof, int, intP, real, realP, spaces, spacesPlus, wspaces } from '../src/parsers';
 import { Context, isFailure } from '../src/types';
 import { sanitize } from './sanitization';
 
@@ -376,6 +376,50 @@ describe('realP', function() {
 
         // Act
         const result = realP(context);
+
+        // Assert
+        assert.ok(isFailure(result));
+      });
+    });
+  });
+});
+
+describe('eof', function() {
+  describe('should parse', () => {
+    const cases = [
+      ''
+    ];
+    cases.forEach(t => {
+      it(`case: '${sanitize(t)}'`, () => {
+        // Arrange
+        const context: Context = { text: t, index: 0, path: '' };
+
+        // Act
+        const result = eof(context);
+
+        // Assert
+        assert.ok(!isFailure(result));
+
+        assert.deepStrictEqual(result.ctx, { text: t, index: t.length, path: '' });
+      });
+    });
+  });
+
+  describe('should fail', () => {
+    const cases = [
+      'f231',
+      'fh316',
+      '-0879i46742167',
+      '12',
+      '031561'
+    ];
+    cases.forEach(t => {
+      it(`case: '${sanitize(t)}'`, () => {
+        // Arrange
+        const context: Context = { text: t, index: 0, path: '' };
+
+        // Act
+        const result = eof(context);
 
         // Assert
         assert.ok(isFailure(result));

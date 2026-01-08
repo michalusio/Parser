@@ -1,6 +1,7 @@
 import * as assert from 'assert';
 
 import { fail, isFailure, ParseError, result } from '../src/types';
+import { sanitize } from './sanitization';
 
 describe('isFailure', function() {
   it(`case 1: true`, () => {
@@ -137,36 +138,21 @@ describe('fail', function() {
 });
 
 describe('ParseError', function() {
-  it(`some reason (line 1, col 4):\\ntext\\n---^`, function() {
-    // Arrange
-    const ctx = { text: 'text\nsecond text', path: '', index: 3 };
+  const cases: [string, number][] = [
+    [`some reason (line 1, col 4):\ntext\n---^`, 3],
+    [`some reason (line 2, col 11):\nsecond text\n----------^`, 15],
+    [`some reason (line 3, col 0):\nthird text!\n^`, 16]
+  ];
+  cases.forEach(c => {
+    it(sanitize(c[0]), function() {
+      // Arrange
+      const ctx = { text: 'text\nsecond text\nthird text!', path: '', index: c[1] };
 
-    // Act
-    const error = new ParseError('some reason', ctx.text, ctx.index, []);
+      // Act
+      const error = new ParseError('some reason', ctx.text, ctx.index, []);
 
-    // Assert
-    assert.deepStrictEqual(error.getPrettyErrorMessage(), this.test!.title.replaceAll('\\n', '\n'));
-  });
-
-  it(`some reason (line 2, col 11):\\nsecond text\\n----------^`, function() {
-    // Arrange
-    const ctx = { text: 'text\nsecond text\nthird text!', path: '', index: 15 };
-
-    // Act
-    const error = new ParseError('some reason', ctx.text, ctx.index, []);
-
-    // Assert
-    assert.deepStrictEqual(error.getPrettyErrorMessage(), this.test!.title.replaceAll('\\n', '\n'));
-  });
-
-  it(`some reason (line 3, col 0):\\nthird text!\\n^`, function() {
-    // Arrange
-    const ctx = { text: 'text\nsecond text\nthird text!', path: '', index: 16 };
-
-    // Act
-    const error = new ParseError('some reason', ctx.text, ctx.index, []);
-
-    // Assert
-    assert.deepStrictEqual(error.getPrettyErrorMessage(), this.test!.title.replaceAll('\\n', '\n'));
+      // Assert
+      assert.deepStrictEqual(error.getPrettyErrorMessage(), c[0]);
+    });
   });
 });

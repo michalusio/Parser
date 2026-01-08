@@ -1,4 +1,4 @@
-import { Parser } from '../types';
+import { failure, Parser, success } from '../types';
 import { map } from './map';
 import { opt } from './opt';
 import { regex } from './regex';
@@ -33,3 +33,13 @@ export const real: Parser<`${number}.${number}`> = expect(map(seq(int, str('.'),
 /** Parses a standard real number (X.X) and returns a number
  */
 export const realP: Parser<number> = map(real, (seq) => parseFloat(seq));
+
+/** Parses an end of text/file. Fails if the parser is not at the end.
+ */
+export const eof: Parser<void> = (ctx) => {
+  if (ctx.index === ctx.text.length) {
+    return success(ctx, void 0);
+  } else {
+    return failure(ctx, "End Of File", ["EOF"]);
+  }
+};

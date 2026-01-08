@@ -1,4 +1,4 @@
-import { Context, failure, isFailure, Parser, Result } from '../types';
+import { Context, failure, isFailure, Parser, Result, success, Token } from '../types';
 
 /** Allows to make a condition on the result of the parsing function.
  * @returns A parser returning the same but also performing a given check on the result.
@@ -36,5 +36,39 @@ export function expectErase<T>(parser: Parser<T>, expected: string): Parser<T> {
           return failure(res.ctx, expected, [expected]);
       }
       return res;
+  }
+}
+
+/**
+ * Wraps the value returned by the parser with the token information (the start and end index in the text)
+ * @returns A parser returning the value wrapped in token information.
+ */
+export function token<T>(parser: Parser<T>): Parser<Token<T>> {
+  return (ctx) => {
+    const result = parser(ctx);
+    if (result.success) {
+      return {
+        ...result,
+        value: {
+          value: result.value,
+          start: ctx.index,
+          end: result.ctx.index
+        }
+      }
+    }
+    return result;
+  }
+}
+
+/**
+ * Checks whether the parser parses successfully, but doesn't move the cursor forward
+ */
+export function lookaround<T>(parser: Parser<T>): Parser<void> {
+  return (ctx) => {
+    const result = parser(ctx);
+    if (result.success) {
+      return success(ctx, void 0);
+    }
+    return failure(ctx, result.expected, ['lookaround', ...result.history]);
   }
 }
