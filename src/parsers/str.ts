@@ -17,14 +17,15 @@ export function str<T extends string>(match: T): Parser<T> {
 /** Parses a string case-insensitively and returns it as a result of the parse.
  * @returns A parser parsing a given string, case-insensitive.
  */
-export function stri<T extends string>(match: T): Parser<T> {
-    return (ctx: Context): Result<T> => {
+export function stri<T extends string>(match: T): Parser<Lowercase<T>> {
+    const lowercase = match.toLowerCase();
+    return (ctx: Context): Result<Lowercase<T>> => {
       const textSlice = ctx.text.slice(ctx.index, ctx.index + match.length);
       if (match.localeCompare(textSlice, undefined, { sensitivity: 'accent' }) == 0) {
-          return success({ ...ctx, index: ctx.index + match.length}, textSlice as T);
+          return success({ ...ctx, index: ctx.index + match.length}, lowercase as Lowercase<T>);
       }
       else {
-          return failure(ctx, match, [match]);
+          return failure(ctx, lowercase, [lowercase]);
       }
   };
 }

@@ -138,7 +138,7 @@ describe('stri', function() {
         // Assert
         assert.ok(!isFailure(result));
 
-        assert.strictEqual(result.value, testString);
+        assert.strictEqual(result.value, testString.toLowerCase());
         assert.deepStrictEqual(result.ctx, { text: testString, index: testString.length, path: '' });
       });
       it(`case: stri('${sanitize(testString)}') -> '${sanitize(testString.toUpperCase())}'`, () => {
@@ -152,7 +152,7 @@ describe('stri', function() {
         // Assert
         assert.ok(!isFailure(result));
 
-        assert.strictEqual(result.value.toUpperCase(), testString.toUpperCase());
+        assert.strictEqual(result.value, testString.toLowerCase());
         assert.deepStrictEqual(result.ctx, { text: testString.toUpperCase(), index: testString.length, path: '' });
       });
     });
@@ -173,7 +173,7 @@ describe('stri', function() {
         // Assert
         assert.ok(!isFailure(result));
 
-        assert.strictEqual(result.value.toUpperCase(), partOfString.toUpperCase());
+        assert.strictEqual(result.value, partOfString.toLowerCase());
         assert.deepStrictEqual(result.ctx, { text: testString, index: partOfString.length, path: '' });
       });
 
@@ -188,7 +188,7 @@ describe('stri', function() {
         // Assert
         assert.ok(!isFailure(result));
 
-        assert.strictEqual(result.value.toUpperCase(), partOfString.toUpperCase());
+        assert.strictEqual(result.value, partOfString.toLowerCase());
         assert.deepStrictEqual(result.ctx, { text: testString, index: partOfString.length, path: '' });
       });
     });
