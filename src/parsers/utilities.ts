@@ -1,4 +1,6 @@
 import { Context, failure, isFailure, Parser, Result, success, Token } from '../types';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { any } from './any';
 
 /** Allows to make a condition on the result of the parsing function.
  * @returns A parser returning the same but also performing a given check on the result.
@@ -37,6 +39,13 @@ export function expectErase<T>(parser: Parser<T>, expected: string): Parser<T> {
       }
       return res;
   }
+}
+
+/**
+ * Marks a parser as a branch that has to be executed to the end by the {@link any} parser
+ */
+export function surely<T>(parser: Parser<T>): Parser<T> {
+    return expect(parser, 'surely');
 }
 
 /**

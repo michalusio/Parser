@@ -33,7 +33,7 @@ describe('ref', function() {
       // Assert
       assert.ok(isFailure(result));
 
-      assert.deepStrictEqual(result.history, [ 'a' ]);
+      assert.deepStrictEqual(result.history, [ '\'a\'' ]);
     });
   });
 
@@ -98,7 +98,7 @@ describe('expect', function() {
       // Assert
       assert.ok(isFailure(result));
 
-      assert.deepStrictEqual(result.history, ['a letter', 'a']);
+      assert.deepStrictEqual(result.history, ['a letter', '\'a\'']);
     });
   });
 });
@@ -170,7 +170,7 @@ describe('token', function() {
       // Assert
       assert.ok(isFailure(result));
 
-      assert.deepStrictEqual(result.history, ['a']);
+      assert.deepStrictEqual(result.history, ['\'a\'']);
     });
   });
 });
@@ -202,7 +202,7 @@ describe('lookaround', function() {
 
       // Assert
       assert.ok(isFailure(result));
-      assert.deepStrictEqual(result.history, ['lookaround', 'a']);
+      assert.deepStrictEqual(result.history, ['lookaround', '\'a\'']);
     });
   });
 });

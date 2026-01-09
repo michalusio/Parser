@@ -1,4 +1,3 @@
-import { expect } from '.';
 import { Context, Failure, failure, isFailure, Parser, Result } from '../types';
 
 /** Parses the input using any passed parser, trying from left to right.
@@ -32,8 +31,4 @@ export function any<T>(...parsers: Parser<T>[]): Parser<T> {
         const longest = expected.reduce((a, b) => a.history.length > b.history.length ? a : b);
         return failure(longest.ctx, longest.expected, ['any', ...longest.history]);
     }
-}
-
-export function surely<T>(parser: Parser<T>): Parser<T> {
-    return expect(parser, 'surely');
 }

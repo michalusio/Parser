@@ -33,12 +33,14 @@ A library of parser combinators, with which you can create your own parsers.
   - `opt`ional
   - `regex`
   - `seq`uence
-  - `str`ing
+  - `str`ing and `stri`ng (case-insensitive)
 - Utility combinators:
   - `ref`er
   - `expect`
   - `expectErase`
   - `surely`
+  - `token`
+  - `lookaround`
 - Ready-made value combinators:
   - `spaces`
   - `spacesPlus`
@@ -46,6 +48,10 @@ A library of parser combinators, with which you can create your own parsers.
   - `bool` (and `boolP`)
   - `int` (and `intP`)
   - `real` (and `realP`)
+  - `eof`
+- Recovery combinators:
+  - `recoverBySkippingChars`
+  - `recoverByAddingChars`
 - Whole parsers:
   - Extended Backus-Naur Form (`EBNF`)
   - JavaScript Object Notation (`JSON`)
@@ -85,3 +91,24 @@ A library of parser combinators, with which you can create your own parsers.
         'The number must be over 1.5!'
     );
     const result = ParseText(' number: 1.25  ', parser); // Will throw a ParseError('The number must be over 1.5!')
+
+##### Pretty messages available on parsing errors:
+
+    import { spacesPlus, str } from 'parser-combinators/parsers';
+    import { ParseText } from 'parser-combinators';
+
+    const parser = seq(
+      str('Lazy fox jumps'), spacesPlus, str('over'), spacesPlus, str('a lazy dog')
+    );
+
+    try {
+      const result = ParseText('Lazy fox jumps under a lazy dog', parser);
+    } catch (e) {
+      console.log(e.getPrettyErrorMessage());
+    }
+
+Will write:
+
+    Parse error, expected over at char 15 (line 1, col 16):
+    Lazy fox jumps under a lazy dog
+    ---------------^
