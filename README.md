@@ -56,6 +56,20 @@ A library of parser combinators, with which you can create your own parsers.
   - Extended Backus-Naur Form (`EBNF`)
   - JavaScript Object Notation (`JSON`)
 
+##### Optimization remarks:
+
+Combining many string parsers using an `any` parser uses parser fusion.
+This means that a parser of the form e.g. `any(str(...), ..., str())` is automatically converted into a search trie.
+This drastically decreases the number of callbacks, and improves performance because all search strings are checked "at once" by going over the trie.
+
+Nested `any` parsers are also supported, as well as `stri` parsers, so all of these undergo fusion:
+
+    any(str('QeQMTvqJuS'), str('IoOYSLNPlM'), str('SpFMUWpzHs'))
+
+    any(str('QeQMTvqJuS'), any(str('IoOYSLNPlM'), str('SpFMUWpzHs')))
+
+    any(str('QeQMTvqJuS'), stri('QeQMTvqJuS'), str('QeqmtabeacErEmTDUUIFcFpsAJhfwqXN'), str('SpFMUWpzHs'))
+
 ### Example usage:
 
 ##### Using standard combinators:
