@@ -187,7 +187,7 @@ describe('oneOrManyRed', function() {
   });
 
   describe('should fail', () => {
-    it(`case: oneOrManyRed(any(str('b'), str('a')), str(','), (a, b) => (Number.isInteger(a) ? a : 1) + (Number.isInteger(b) ? b : 1)) -> 'a,b,b'`, () => {
+    it(`case: oneOrManyRed(any(str('b'), str('a')), str(','), (a, b) => (Number.isInteger(a) ? a : 1) + (Number.isInteger(b) ? b : 1)) -> 'c,b,b'`, () => {
       // Arrange
       const ctx: Context = { text: 'c,b,b', index: 0, path: '' };
       const parser = oneOrManyRed<'a' | 'b', ',', number>(any(str('b'), str('a')), str(','), (a, b) => (typeof a === 'number' ? a : 1) + (typeof b === 'number' ? b : 1));

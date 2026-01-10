@@ -1,4 +1,8 @@
 import { Context, Failure, failure, isFailure, Parser, Result } from '../types';
+import { anyString, OptimizableStrParser } from './anyString';
+import { shouldPerformFusions } from './utilities';
+
+const optimizableTypes = ['str', 'stri', 'anyString'];
 
 /** Parses the input using any passed parser, trying from left to right.
  * @returns A parser returning the result of the first parser that succeeds, or the failure that has come the furthest.
@@ -16,6 +20,9 @@ export function any<T, U>(...parsers: [Parser<T>, Parser<U>]): Parser<T | U>
 export function any<T>(...parsers: [Parser<T>]): Parser<T>
 export function any<T>(...parsers: Parser<T>[]): Parser<T>
 export function any<T>(...parsers: Parser<T>[]): Parser<T> {
+    if (shouldPerformFusions() && parsers.every(p => 'parserType' in p && typeof p.parserType === 'string' && optimizableTypes.includes(p.parserType))) {
+        return anyString(...parsers as OptimizableStrParser<string>[]) as Parser<T>;
+    }
     return (ctx: Context): Result<T> => {
         const expected: Failure[] = [];
         for (const parser of parsers) {

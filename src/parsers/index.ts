@@ -6,7 +6,7 @@ export * from './map';
 export * from './opt';
 export * from './regex';
 export * from './seq';
-export * from './str';
+export { str, stri } from './str';
 export * from './recovery';
 export * from './utilities';
 export * from './values';

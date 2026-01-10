@@ -1,6 +1,6 @@
 import * as assert from 'assert';
 
-import { any, regex, seq, str, surely } from '../src/parsers';
+import { any, regex, seq, str, stri, surely } from '../src/parsers';
 import { Context, isFailure } from '../src/types';
 import { sanitize } from './sanitization';
 
@@ -19,6 +19,42 @@ describe('any', function() {
 
       assert.deepStrictEqual(result.value, 'a');
       assert.deepStrictEqual(result.ctx, { text: 'abc', index:1, path: '' });
+    });
+
+    it(`case: any(str('a'), stri('b')) -> 'Bc'`, () => {
+      // Arrange
+      const ctx: Context = { text: 'Bc', index: 0, path: '' };
+      const parser = any(str('a'), stri('b'));
+
+      // Checking for optimization
+      assert.equal((parser as unknown as { parserType: string })['parserType'], 'anyString');
+
+      // Act
+      const result = parser(ctx);
+
+      // Assert
+      assert.ok(!isFailure(result));
+
+      assert.deepStrictEqual(result.value, 'b');
+      assert.deepStrictEqual(result.ctx, { text: 'Bc', index:1, path: '' });
+    });
+
+    it(`case: any(str('a'), any(str('c'), stri('b'))) -> 'Bc'`, () => {
+      // Arrange
+      const ctx: Context = { text: 'Bc', index: 0, path: '' };
+      const parser = any(str('a'), any(str('c'), stri('b')));
+
+      // Checking for optimization
+      assert.equal((parser as unknown as { parserType: string })['parserType'], 'anyString');
+
+      // Act
+      const result = parser(ctx);
+
+      // Assert
+      assert.ok(!isFailure(result));
+
+      assert.deepStrictEqual(result.value, 'b');
+      assert.deepStrictEqual(result.ctx, { text: 'Bc', index:1, path: '' });
     });
 
     it(`case: any(str('x')) -> 'xasf'`, () => {

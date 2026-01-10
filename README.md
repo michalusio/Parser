@@ -104,7 +104,7 @@ A library of parser combinators, with which you can create your own parsers.
     try {
       const result = ParseText('Lazy fox jumps under a lazy dog', parser);
     } catch (e) {
-      console.log(e.getPrettyErrorMessage());
+      console.error(e.getPrettyErrorMessage());
     }
 
 Will write:

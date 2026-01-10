@@ -1,6 +1,18 @@
 import { Context, failure, isFailure, Parser, Result, success, Token } from '../types';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { any } from './any';
+import type { any } from './any';
+
+export const shouldPerformFusions = () => performFusions;
+
+let performFusions = true;
+/**
+ * Disables all parser combinator fusions.
+ * 
+ * Should probably be used only for testing performance.
+ */
+export const toggleFusions = (value: boolean) => {
+  performFusions = value;
+};
 
 /** Allows to make a condition on the result of the parsing function.
  * @returns A parser returning the same but also performing a given check on the result.
