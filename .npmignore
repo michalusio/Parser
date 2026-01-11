@@ -12,6 +12,7 @@ reports
 .gitignore
 .github
 .stryker-tmp
+eslint.config.mjs
 stryker.config.json
 tsconfig.json
 tsconfig.eslint.json
