@@ -6,11 +6,11 @@ import { Context, Parser } from '../src/types';
 import { mochaLog } from './logging.spec';
 
 describe('fusions should be faster than non-fused parsers', () => {
-    it(`case: any(any(str('QeQMTvqJuS'), str('ErEmTDUUIF')), any(str('IoOYSLNPlM'), str('SpFMUWpzHs'))) -> 'ImWebhqJMcErEmTDUUIFcFpsAJhfwqXN' x 10_000`, function() {
-        const parserFused = any(any(str('QeQMTvqJuS'), str('ErEmTDUUIF')), any(str('IoOYSLNPlM'), str('SpFMUWpzHs')));
+    it(`case: any(any(str('QeQMTvqJuS'), stri('ErEmTDUUIF')), any(str('IoOYSLNPlM'), stri('SpFMUWpzHs'))) -> 'ImWebhqJMcErEmTDUUIFcFpsAJhfwqXN' x 10_000`, function() {
+        const parserFused = any(any(str('QeQMTvqJuS'), stri('ErEmTDUUIF')), any(str('IoOYSLNPlM'), stri('SpFMUWpzHs')));
 
         toggleFusions(false);
-        const parserNonFused = any(any(str('QeQMTvqJuS'), str('ErEmTDUUIF')), any(str('IoOYSLNPlM'), str('SpFMUWpzHs')));
+        const parserNonFused = any(any(str('QeQMTvqJuS'), stri('ErEmTDUUIF')), any(str('IoOYSLNPlM'), stri('SpFMUWpzHs')));
         toggleFusions(true);
 
         const context: Context = { index: 0, path: '', text: 'ImWebhqJMcErEmTDUUIFcFpsAJhfwqXN' };
@@ -18,11 +18,11 @@ describe('fusions should be faster than non-fused parsers', () => {
         checkFusion(parserFused, parserNonFused, context, 10000);
     });
 
-    it(`case: any(str('QeQMTvqJuS'), stri('QeQMTvqJuS'), str('QeqmtabeacErEmTDUUIFcFpsAJhfwqXN'), str('SpFMUWpzHs')) -> 'QeqmtabeacErEmTDUUIFcFpsAJhfwqXN' x 10_000`, function() {
-        const parserFused = any(str('QeQMTvqJuS'), stri('QeQMTvqJuS'), str('QeqmtabeacErEmTDUUIFcFpsAJhfwqXN'), str('SpFMUWpzHs'));
+    it(`case: any(str('QeQMTvqJuS'), stri('ErEmTDUUIF'), str('IoOYSLNPlM'), stri('SpFMUWpzHs')) -> 'QeqmtabeacErEmTDUUIFcFpsAJhfwqXN' x 10_000`, function() {
+        const parserFused = any(str('QeQMTvqJuS'), stri('ErEmTDUUIF'), str('IoOYSLNPlM'), stri('SpFMUWpzHs'));
 
         toggleFusions(false);
-        const parserNonFused = any(str('QeQMTvqJuS'), stri('QeQMTvqJuS'), str('QeqmtabeacErEmTDUUIFcFpsAJhfwqXN'), str('SpFMUWpzHs'));
+        const parserNonFused = any(str('QeQMTvqJuS'), stri('ErEmTDUUIF'), str('IoOYSLNPlM'), stri('SpFMUWpzHs'));
         toggleFusions(true);
 
         const context: Context = { index: 0, path: '', text: 'QeqmtabeacErEmTDUUIFcFpsAJhfwqXN' };

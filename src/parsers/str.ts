@@ -25,6 +25,8 @@ export type StrIParser<T> = Parser<T> & {
     match: T
 };
 
+const collator = new Intl.Collator('en', { sensitivity: 'accent' });
+
 /** Parses a string case-insensitively and returns it as a result of the parse.
  * @returns A parser parsing a given string, case-insensitive.
  */
@@ -33,7 +35,7 @@ export function stri<T extends string>(match: T): StrIParser<Lowercase<T>> {
     const inQuotes = `'${lowercase}'`;
     return Object.assign((ctx: Context): Result<Lowercase<T>> => {
       const textSlice = ctx.text.slice(ctx.index, ctx.index + match.length);
-      if (match.localeCompare(textSlice, undefined, { sensitivity: 'accent' }) == 0) {
+      if (collator.compare(match, textSlice) == 0) {
           return success({ ...ctx, index: ctx.index + match.length}, lowercase as Lowercase<T>);
       }
       else {
