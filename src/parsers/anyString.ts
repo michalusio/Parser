@@ -14,29 +14,7 @@ export type OptimizableStrParser<T> = AnyStringParser<T> | StrParser<T> | StrIPa
 /**
  * Optimization for `any(str(), str(), ...)` which replaces the parser tree with one parser which tries all strings together
  */
-export function anyString<T extends string, U extends string, V extends string, W extends string, X extends string, Z extends string, I extends string, J extends string, K extends string, L extends string, M extends string>(...parsers: [OptimizableStrParser<T>, OptimizableStrParser<U>, OptimizableStrParser<V>, OptimizableStrParser<W>, OptimizableStrParser<X>, OptimizableStrParser<Z>, OptimizableStrParser<I>, OptimizableStrParser<J>, OptimizableStrParser<K>, OptimizableStrParser<L>, OptimizableStrParser<M>]): AnyStringParser<T | U | V | W | X | Z | I | J | K | L | M>
-export function anyString<T extends string, U extends string, V extends string, W extends string, X extends string, Z extends string, I extends string, J extends string, K extends string, L extends string>(...parsers: [OptimizableStrParser<T>, OptimizableStrParser<U>, OptimizableStrParser<V>, OptimizableStrParser<W>, OptimizableStrParser<X>, OptimizableStrParser<Z>, OptimizableStrParser<I>, OptimizableStrParser<J>, OptimizableStrParser<K>, OptimizableStrParser<L>]): AnyStringParser<T | U | V | W | X | Z | I | J | K | L>
-export function anyString<T extends string, U extends string, V extends string, W extends string, X extends string, Z extends string, I extends string, J extends string, K extends string>(...parsers: [OptimizableStrParser<T>, OptimizableStrParser<U>, OptimizableStrParser<V>, OptimizableStrParser<W>, OptimizableStrParser<X>, OptimizableStrParser<Z>, OptimizableStrParser<I>, OptimizableStrParser<J>, OptimizableStrParser<K>]): AnyStringParser<T | U | V | W | X | Z | I | J | K>
-export function anyString<T extends string, U extends string, V extends string, W extends string, X extends string, Z extends string, I extends string, J extends string>(...parsers: [OptimizableStrParser<T>, OptimizableStrParser<U>, OptimizableStrParser<V>, OptimizableStrParser<W>, OptimizableStrParser<X>, OptimizableStrParser<Z>, OptimizableStrParser<I>, OptimizableStrParser<J>]): AnyStringParser<T | U | V | W | X | Z | I | J>
-export function anyString<T extends string, U extends string, V extends string, W extends string, X extends string, Z extends string, I extends string>(...parsers: [OptimizableStrParser<T>, OptimizableStrParser<U>, OptimizableStrParser<V>, OptimizableStrParser<W>, OptimizableStrParser<X>, OptimizableStrParser<Z>, OptimizableStrParser<I>]): AnyStringParser<T | U | V | W | X | Z | I>
-export function anyString<T extends string, U extends string, V extends string, W extends string, X extends string, Z extends string>(...parsers: [OptimizableStrParser<T>, OptimizableStrParser<U>, OptimizableStrParser<V>, OptimizableStrParser<W>, OptimizableStrParser<X>, OptimizableStrParser<Z>]): AnyStringParser<T | U | V | W | X | Z>
-export function anyString<T extends string, U extends string, V extends string, W extends string, X extends string>(...parsers: [OptimizableStrParser<T>, OptimizableStrParser<U>, OptimizableStrParser<V>, OptimizableStrParser<W>, OptimizableStrParser<X>]): AnyStringParser<T | U | V | W | X >
-export function anyString<T extends string, U extends string, V extends string, W extends string>(...parsers: [OptimizableStrParser<T>, OptimizableStrParser<U>, OptimizableStrParser<V>, OptimizableStrParser<W>]): AnyStringParser<T | U | V | W>
-export function anyString<T extends string, U extends string, V extends string>(...parsers: [OptimizableStrParser<T>, OptimizableStrParser<U>, OptimizableStrParser<V>]): AnyStringParser<T | U | V>
-export function anyString<T extends string, U extends string>(...parsers: [OptimizableStrParser<T>, OptimizableStrParser<U>]): AnyStringParser<T | U>
-export function anyString<T extends string>(...parsers: [OptimizableStrParser<T>]): AnyStringParser<T>
-export function anyString<T extends string>(...parsers: OptimizableStrParser<T>[]): AnyStringParser<T>
-export function anyString<T extends string>(...parsers: OptimizableStrParser<T>[]): AnyStringParser<T> {
-    const matches = parsers.flatMap(p => {
-        switch (p.parserType) {
-            case 'anyString':
-                return p.matches;
-            case 'str':
-                return [[p.match, false] as const];
-            case 'stri':
-                return [[p.match, true] as const];
-        }
-    });
+export function anyString<T extends string>(matches: (readonly [string, boolean])[]): AnyStringParser<T> {
     const lastMatchInQuotes = `'${matches[matches.length - 1][0]}'`;
     let tree: SearchNode
     return Object.assign((ctx: Context): Result<T> => {

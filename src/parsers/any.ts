@@ -20,10 +20,26 @@ export function any<T, U>(...parsers: [Parser<T>, Parser<U>]): Parser<T | U>
 export function any<T>(...parsers: [Parser<T>]): Parser<T>
 export function any<T>(...parsers: Parser<T>[]): Parser<T>
 export function any<T>(...parsers: Parser<T>[]): Parser<T> {
+    let marker = {};
     if (shouldPerformFusions() && parsers.every(p => 'parserType' in p && typeof p.parserType === 'string' && optimizableTypes.includes(p.parserType))) {
-        return anyString(...parsers as OptimizableStrParser<string>[]) as Parser<T>;
+        const optimizableParsers = parsers as OptimizableStrParser<string>[];
+        const matches = optimizableParsers.flatMap(p => {
+            switch (p.parserType) {
+                case 'anyString':
+                    return p.matches;
+                case 'str':
+                    return [[p.match, false] as const];
+                case 'stri':
+                    return [[p.match, true] as const];
+            }
+        });
+        if (matches.length > 3) {
+            return anyString(matches) as Parser<T>;
+        } else {
+            marker = { parserType: 'anyString', matches };
+        }
     }
-    return (ctx: Context): Result<T> => {
+    return Object.assign((ctx: Context): Result<T> => {
         const expected: Failure[] = [];
         for (const parser of parsers) {
             const res = parser(ctx);
@@ -37,5 +53,5 @@ export function any<T>(...parsers: Parser<T>[]): Parser<T> {
         }
         const longest = expected.reduce((a, b) => a.history.length > b.history.length ? a : b);
         return failure(longest.ctx, longest.expected, ['any', ...longest.history]);
-    }
+    }, marker);
 }
