@@ -38,8 +38,9 @@ export function anyString<T extends string>(...parsers: OptimizableStrParser<T>[
         }
     });
     const lastMatchInQuotes = `'${matches[matches.length - 1][0]}'`;
-    const tree = createSearchTree(matches);
+    let tree: SearchNode
     return Object.assign((ctx: Context): Result<T> => {
+        tree ??= createSearchTree(matches);
         const result = searchThroughTree(tree, ctx.text, ctx.index);
         if (result) {
             return success({ ...ctx, index: result.end }, matches[result.matchIndex][0] as T);
@@ -50,13 +51,11 @@ export function anyString<T extends string>(...parsers: OptimizableStrParser<T>[
 }
 
 type SearchNode = {
-    matchIndex: number | undefined;
-} & {
-    [Char: string]: SearchNode | undefined;
-}
+    matchIndex?: number;
+} & Map<string, SearchNode>;
 
 function createSearchTree(matches: (readonly [string, boolean])[]): SearchNode {
-    const tree: SearchNode = { matchIndex: undefined };
+    const tree: SearchNode = new Map();
     matches.forEach((match, index) => addMatchToTree(tree, match, index));
     return tree;    
 }
@@ -72,20 +71,26 @@ function addMatchToTree(node: SearchNode, match: readonly [string, boolean], idI
         const char = match[0][charIndex];
         const lowercase = char.toLowerCase();
         const uppercase = char.toUpperCase();
-        const newNode = { matchIndex: undefined };
+        const newNode: SearchNode = new Map();
         if (match[1] && (lowercase !== uppercase)) {
-            node[lowercase] ??= newNode;
-            node[uppercase] ??= newNode;
-            addMatchToTree(node[lowercase]!, match, idIndex, charIndex + 1);
-            if (node[lowercase] !== node[uppercase]) {
-                addMatchToTree(node[uppercase]!, match, idIndex, charIndex + 1);
+            const lower = node.get(lowercase) ?? newNode;
+            const upper = node.get(uppercase) ?? newNode;
+            node.set(lowercase, lower);
+            node.set(uppercase, upper);
+            addMatchToTree(lower, match, idIndex, charIndex + 1);
+            if (lower !== upper) {
+                addMatchToTree(upper, match, idIndex, charIndex + 1);
             }
         } else {
-            node[char] ??= newNode;
-            if (node[lowercase] === node[uppercase]) {
-                node[uppercase] = { ...node[lowercase] } as SearchNode;
+            const charNode = node.get(char) ?? newNode;
+            node.set(char, charNode);
+            const lower = node.get(lowercase);
+            if (lower === node.get(uppercase)) {
+                const copy: SearchNode = new Map(lower!.entries());
+                copy.matchIndex = lower!.matchIndex;
+                node.set(uppercase, copy);
             }
-            addMatchToTree(node[char]!, match, idIndex, charIndex + 1);
+            addMatchToTree(charNode, match, idIndex, charIndex + 1);
         }
     }
 }
@@ -100,7 +105,7 @@ function searchThroughTree(node: SearchNode, text: string, start: number): { end
             lastSuccessIndex = index;
             lastSuccessMatchIndex = currentNode!.matchIndex;
         }
-        currentNode = currentNode![char];
+        currentNode = currentNode!.get(char);
         if (!currentNode) break;
     }
     if (currentNode && currentNode.matchIndex != undefined && (lastSuccessMatchIndex == undefined || currentNode.matchIndex <= lastSuccessMatchIndex)) {

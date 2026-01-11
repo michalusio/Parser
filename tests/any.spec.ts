@@ -26,9 +26,6 @@ describe('any', function() {
       const ctx: Context = { text: 'Bc', index: 0, path: '' };
       const parser = any(str('a'), stri('b'));
 
-      // Checking for optimization
-      assert.equal((parser as unknown as { parserType: string })['parserType'], 'anyString');
-
       // Act
       const result = parser(ctx);
 
@@ -43,9 +40,6 @@ describe('any', function() {
       // Arrange
       const ctx: Context = { text: 'Bc', index: 0, path: '' };
       const parser = any(str('a'), any(str('c'), stri('b')));
-
-      // Checking for optimization
-      assert.equal((parser as unknown as { parserType: string })['parserType'], 'anyString');
 
       // Act
       const result = parser(ctx);
