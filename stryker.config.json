@@ -17,6 +17,7 @@
     "prioritizePerformanceOverAccuracy": true
   },
   "incremental": true,
+  "logLevel": "trace",
   "mutate": [
     "src/**/*.{js,ts,jsx,tsx,cts,mts}"
   ]
