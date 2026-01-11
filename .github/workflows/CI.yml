@@ -61,7 +61,6 @@ jobs:
       run: npm ci
 
     - name: Restore mutation incremental file
-      if: ${{ matrix.node-version == '24.x' }}
       uses: actions/cache/restore@v4
       with:
         path: |
@@ -69,11 +68,9 @@ jobs:
         key: stryker-incremental
 
     - name: Mutation testing
-      if: ${{ matrix.node-version == '24.x' }}
       run: npm run test:mutate
 
     - name: Cache mutation incremental file
-      if: ${{ matrix.node-version == '24.x' }}
       uses: actions/cache/save@v4
       with:
         path: |
