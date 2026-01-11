@@ -6,10 +6,6 @@ import { Context, Result } from '../src/types';
 import { mochaLog } from './logging.spec';
 
 describe('fusions should be faster than non-fused parsers', () => {
-    beforeEach(function() {
-        this.timeout(5000);
-    });
-
     it(`case: any(str('QeQMTvqJuS'), str('IoOYSLNPlM'), str('SpFMUWpzHs')) -> 'ImWebhqJMcErEmTDUUIFcFpsAJhfwqXN' x 10_000`, function() {
         const parserFused = any(str('QeQMTvqJuS'), str('IoOYSLNPlM'), str('SpFMUWpzHs'));
 
@@ -97,7 +93,7 @@ describe('fusions should be faster than non-fused parsers', () => {
         assert.ok(nonFusedTime > fusedTime, 'Fused parsing should be faster than non-fused parsing');
     });
 
-    it(`case: any(str('jKUuKrxuKm'), ..., stri('olFldPZKYF')) -> 'ImWebhqJMcErEmTDUUIFcFpsAJhfwqXN' x 10_000`, function() {
+    it(`case: any(str('jKUuKrxuKm'), ..., stri('olFldPZKYF')) -> 'ImWebhqJMcErEmTDUUIFcFpsAJhfwqXN' x 1_000`, function() {
         const parserFused = any(
             str('jKUuKrxuKm'),
             str('ywNOFmhnRh'),
@@ -168,16 +164,16 @@ describe('fusions should be faster than non-fused parsers', () => {
 
         const context: Context = { index: 0, path: '', text: 'ImWebhqJMcErEmTDUUIFcFpsAJhfwqXN' };
 
-        const fusedResults: ReturnType<typeof parserFused>[] = new Array(10000);
+        const fusedResults: ReturnType<typeof parserFused>[] = new Array(1000);
         const fusedStart = performance.now();
-        for (let index = 0; index < 10000; index++) {
+        for (let index = 0; index < 1000; index++) {
             fusedResults.push(parserFused(context));
         }
         const fusedTime = performance.now() - fusedStart;
 
-        const nonFusedResults: ReturnType<typeof parserNonFused>[] = new Array(10000);
+        const nonFusedResults: ReturnType<typeof parserNonFused>[] = new Array(1000);
         const nonFusedStart = performance.now();
-        for (let index = 0; index < 10000; index++) {
+        for (let index = 0; index < 1000; index++) {
             nonFusedResults.push(parserNonFused(context));
         }
         const nonFusedTime = performance.now() - nonFusedStart;

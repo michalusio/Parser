@@ -9,7 +9,6 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     strategy:
@@ -44,3 +43,39 @@ jobs:
         slug: "michalusio/parser"
       env:
         CODECOV_TOKEN: ${{ secrets.CODECOV }}
+  
+  mutate:
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+    - uses: actions/checkout@v6.0.1
+
+    - name: Using Node.js 24.x
+      uses: actions/setup-node@v6.1.0
+      with:
+        node-version: 24.x
+        cache: 'npm'
+
+    - name: Install
+      run: npm ci
+
+    - name: Restore mutation incremental file
+      if: ${{ matrix.node-version == '24.x' }}
+      uses: actions/cache/restore@v4
+      with:
+        path: |
+          reports/stryker-incremental.json
+        key: stryker-incremental
+
+    - name: Mutation testing
+      if: ${{ matrix.node-version == '24.x' }}
+      run: npm run test:mutate
+
+    - name: Cache mutation incremental file
+      if: ${{ matrix.node-version == '24.x' }}
+      uses: actions/cache/save@v4
+      with:
+        path: |
+          reports/stryker-incremental.json
+        key: stryker-incremental

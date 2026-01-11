@@ -4,3 +4,7 @@ dist
 .env
 coverage
 .nyc_output
+# stryker temp files
+.stryker-tmp
+reports/stryker-incremental.json
+reports/mutation/mutation.html
