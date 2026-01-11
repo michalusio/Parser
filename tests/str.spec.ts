@@ -88,7 +88,7 @@ describe('str', function() {
       'a'
     ];
     strings.forEach(testString => {
-      it(`when the value is not equal by case (${testString})`, () => {
+      it(`when the value is not equal by case (${sanitize(testString)})`, () => {
         // Arrange
         const context: Context = { text: testString.toUpperCase(), index: 0, path: '' };
         const parser = str(testString);

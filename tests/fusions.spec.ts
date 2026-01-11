@@ -35,23 +35,23 @@ describe('fusions should be faster than non-fused parsers', () => {
         assert.ok(nonFusedTime > fusedTime, 'Fused parsing should be faster than non-fused parsing');
     });
 
-    it(`case: any(str('QeQMTvqJuS'), any(str('IoOYSLNPlM'), str('SpFMUWpzHs'))) -> 'ImWebhqJMcErEmTDUUIFcFpsAJhfwqXN' x 10_000`, function() {
-        const parserFused = any(str('QeQMTvqJuS'), any(str('IoOYSLNPlM'), str('SpFMUWpzHs')));
+    it(`case: any(str('QeQMTvqJuS'), any(str('ErEmTDUUIF'), any(str('IoOYSLNPlM'), str('SpFMUWpzHs')))) -> 'ImWebhqJMcErEmTDUUIFcFpsAJhfwqXN' x 10_000`, function() {
+        const parserFused = any(str('QeQMTvqJuS'), any(str('ErEmTDUUIF'), any(str('IoOYSLNPlM'), str('SpFMUWpzHs'))));
 
         toggleFusions(false);
-        const parserNonFused = any(str('QeQMTvqJuS'), any(str('IoOYSLNPlM'), str('SpFMUWpzHs')));
+        const parserNonFused = any(str('QeQMTvqJuS'), any(str('ErEmTDUUIF'), any(str('IoOYSLNPlM'), str('SpFMUWpzHs'))));
         toggleFusions(true);
 
         const context: Context = { index: 0, path: '', text: 'ImWebhqJMcErEmTDUUIFcFpsAJhfwqXN' };
 
-        const fusedResults: Result<"QeQMTvqJuS" | "IoOYSLNPlM" | "SpFMUWpzHs">[] = new Array(10000);
+        const fusedResults: ReturnType<typeof parserFused>[] = new Array(10000);
         const fusedStart = performance.now();
         for (let index = 0; index < 10000; index++) {
             fusedResults.push(parserFused(context));
         }
         const fusedTime = performance.now() - fusedStart;
 
-        const nonFusedResults: Result<"QeQMTvqJuS" | "IoOYSLNPlM" | "SpFMUWpzHs">[] = new Array(10000);
+        const nonFusedResults: ReturnType<typeof parserNonFused>[] = new Array(10000);
         const nonFusedStart = performance.now();
         for (let index = 0; index < 10000; index++) {
             nonFusedResults.push(parserNonFused(context));
@@ -65,7 +65,7 @@ describe('fusions should be faster than non-fused parsers', () => {
     });
 
     it(`case: any(str('QeQMTvqJuS'), stri('QeQMTvqJuS'), str('QeqmtabeacErEmTDUUIFcFpsAJhfwqXN'), str('SpFMUWpzHs')) -> 'QeqmtabeacErEmTDUUIFcFpsAJhfwqXN' x 10_000`, function() {
-        const parserFused = any(str('QeQMTvqJuS'), stri('QeQMTvqJuS'), str('Qeqmtabea'), str('SpFMUWpzHs'));
+        const parserFused = any(str('QeQMTvqJuS'), stri('QeQMTvqJuS'), str('QeqmtabeacErEmTDUUIFcFpsAJhfwqXN'), str('SpFMUWpzHs'));
 
         toggleFusions(false);
         const parserNonFused = any(str('QeQMTvqJuS'), stri('QeQMTvqJuS'), str('QeqmtabeacErEmTDUUIFcFpsAJhfwqXN'), str('SpFMUWpzHs'));
