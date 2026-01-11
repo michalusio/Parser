@@ -6,11 +6,11 @@ import { Context } from '../src/types';
 import { mochaLog } from './logging.spec';
 
 describe('fusions should be faster than non-fused parsers', () => {
-    it(`case: any(str('QeQMTvqJuS'), any(str('ErEmTDUUIF'), any(str('IoOYSLNPlM'), str('SpFMUWpzHs')))) -> 'ImWebhqJMcErEmTDUUIFcFpsAJhfwqXN' x 10_000`, function() {
-        const parserFused = any(str('QeQMTvqJuS'), any(str('ErEmTDUUIF'), any(str('IoOYSLNPlM'), str('SpFMUWpzHs'))));
+    it(`case: any(any(str('QeQMTvqJuS'), str('ErEmTDUUIF')), any(str('IoOYSLNPlM'), str('SpFMUWpzHs'))) -> 'ImWebhqJMcErEmTDUUIFcFpsAJhfwqXN' x 10_000`, function() {
+        const parserFused = any(any(str('QeQMTvqJuS'), str('ErEmTDUUIF')), any(str('IoOYSLNPlM'), str('SpFMUWpzHs')));
 
         toggleFusions(false);
-        const parserNonFused = any(str('QeQMTvqJuS'), any(str('ErEmTDUUIF'), any(str('IoOYSLNPlM'), str('SpFMUWpzHs'))));
+        const parserNonFused = any(any(str('QeQMTvqJuS'), str('ErEmTDUUIF')), any(str('IoOYSLNPlM'), str('SpFMUWpzHs')));
         toggleFusions(true);
 
         const context: Context = { index: 0, path: '', text: 'ImWebhqJMcErEmTDUUIFcFpsAJhfwqXN' };
