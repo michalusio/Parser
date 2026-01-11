@@ -2,7 +2,7 @@ import * as assert from 'assert';
 import { any } from '../src/parsers/any';
 import { str, stri } from '../src/parsers/str';
 import { toggleFusions } from '../src/parsers/utilities';
-import { Context } from '../src/types';
+import { Context, Parser } from '../src/types';
 import { mochaLog } from './logging.spec';
 
 describe('fusions should be faster than non-fused parsers', () => {
@@ -15,24 +15,7 @@ describe('fusions should be faster than non-fused parsers', () => {
 
         const context: Context = { index: 0, path: '', text: 'ImWebhqJMcErEmTDUUIFcFpsAJhfwqXN' };
 
-        const fusedResults: ReturnType<typeof parserFused>[] = new Array(10000);
-        const fusedStart = performance.now();
-        for (let index = 0; index < 10000; index++) {
-            fusedResults.push(parserFused(context));
-        }
-        const fusedTime = performance.now() - fusedStart;
-
-        const nonFusedResults: ReturnType<typeof parserNonFused>[] = new Array(10000);
-        const nonFusedStart = performance.now();
-        for (let index = 0; index < 10000; index++) {
-            nonFusedResults.push(parserNonFused(context));
-        }
-        const nonFusedTime = performance.now() - nonFusedStart;
-
-        mochaLog('Fused parsing:', fusedTime.toFixed(2) + 'ms');
-        mochaLog('Non-fused parsing:', nonFusedTime.toFixed(2) + 'ms');
-        assert.deepEqual(fusedResults[0], nonFusedResults[0], 'Fused and non-fused parsing should generate the same output');
-        assert.ok(nonFusedTime > fusedTime, 'Fused parsing should be faster than non-fused parsing');
+        checkFusion(parserFused, parserNonFused, context, 10000);
     });
 
     it(`case: any(str('QeQMTvqJuS'), stri('QeQMTvqJuS'), str('QeqmtabeacErEmTDUUIFcFpsAJhfwqXN'), str('SpFMUWpzHs')) -> 'QeqmtabeacErEmTDUUIFcFpsAJhfwqXN' x 10_000`, function() {
@@ -44,24 +27,7 @@ describe('fusions should be faster than non-fused parsers', () => {
 
         const context: Context = { index: 0, path: '', text: 'QeqmtabeacErEmTDUUIFcFpsAJhfwqXN' };
 
-        const fusedResults: ReturnType<typeof parserFused>[] = new Array(10000);
-        const fusedStart = performance.now();
-        for (let index = 0; index < 10000; index++) {
-            fusedResults.push(parserFused(context));
-        }
-        const fusedTime = performance.now() - fusedStart;
-
-        const nonFusedResults: ReturnType<typeof parserNonFused>[] = new Array(10000);
-        const nonFusedStart = performance.now();
-        for (let index = 0; index < 10000; index++) {
-            nonFusedResults.push(parserNonFused(context));
-        }
-        const nonFusedTime = performance.now() - nonFusedStart;
-
-        mochaLog('Fused parsing:', fusedTime.toFixed(2) + 'ms');
-        mochaLog('Non-fused parsing:', nonFusedTime.toFixed(2) + 'ms');
-        assert.deepEqual(fusedResults[0], nonFusedResults[0], 'Fused and non-fused parsing should generate the same output');
-        assert.ok(nonFusedTime > fusedTime, 'Fused parsing should be faster than non-fused parsing');
+        checkFusion(parserFused, parserNonFused, context, 10000);
     });
 
     it(`case: any(str('jKUuKrxuKm'), ..., stri('olFldPZKYF')) -> 'ImWebhqJMcErEmTDUUIFcFpsAJhfwqXN' x 1_000`, function() {
@@ -135,23 +101,36 @@ describe('fusions should be faster than non-fused parsers', () => {
 
         const context: Context = { index: 0, path: '', text: 'ImWebhqJMcErEmTDUUIFcFpsAJhfwqXN' };
 
-        const fusedResults: ReturnType<typeof parserFused>[] = new Array(1000);
-        const fusedStart = performance.now();
-        for (let index = 0; index < 1000; index++) {
-            fusedResults.push(parserFused(context));
-        }
-        const fusedTime = performance.now() - fusedStart;
-
-        const nonFusedResults: ReturnType<typeof parserNonFused>[] = new Array(1000);
-        const nonFusedStart = performance.now();
-        for (let index = 0; index < 1000; index++) {
-            nonFusedResults.push(parserNonFused(context));
-        }
-        const nonFusedTime = performance.now() - nonFusedStart;
-
-        mochaLog('Fused parsing:', fusedTime.toFixed(2) + 'ms');
-        mochaLog('Non-fused parsing:', nonFusedTime.toFixed(2) + 'ms');
-        assert.deepEqual(fusedResults[0], nonFusedResults[0], 'Fused and non-fused parsing should generate the same output');
-        assert.ok(nonFusedTime > fusedTime, 'Fused parsing should be faster than non-fused parsing');
+        checkFusion(parserFused, parserNonFused, context, 1000);
     });
+
 });
+
+function checkFusion<T>(parserFused: Parser<T>, parserNonFused: Parser<T>, context: Context, times: number) {
+    // pre-heating
+    for (let index = 0; index < 1000; index++) {
+        parserFused(context);
+    }
+    for (let index = 0; index < 1000; index++) {
+        parserNonFused(context);
+    }
+    
+    const fusedResults: ReturnType<typeof parserFused>[] = new Array(times);
+    const fusedStart = performance.now();
+    for (let index = 0; index < times; index++) {
+        fusedResults.push(parserFused(context));
+    }
+    const fusedTime = performance.now() - fusedStart;
+
+    const nonFusedResults: ReturnType<typeof parserNonFused>[] = new Array(times);
+    const nonFusedStart = performance.now();
+    for (let index = 0; index < times; index++) {
+        nonFusedResults.push(parserNonFused(context));
+    }
+    const nonFusedTime = performance.now() - nonFusedStart;
+
+    mochaLog('Fused parsing:', fusedTime.toFixed(2) + 'ms');
+    mochaLog('Non-fused parsing:', nonFusedTime.toFixed(2) + 'ms');
+    assert.deepEqual(fusedResults[0], nonFusedResults[0], 'Fused and non-fused parsing should generate the same output');
+    assert.ok(nonFusedTime > fusedTime, 'Fused parsing should be faster than non-fused parsing');
+}
