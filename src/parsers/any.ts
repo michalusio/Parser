@@ -33,7 +33,9 @@ export function any<T>(...parsers: Parser<T>[]): Parser<T> {
                     return [[p.match, true] as const];
             }
         });
-        if (matches.length > 3) {
+        // Not fusing if not enough matches
+        // We do pass the matches forward though, because a parser above may want to fuse
+        if (matches.length > 10) {
             return anyString(matches) as Parser<T>;
         } else {
             marker = { parserType: 'anyString', matches };
