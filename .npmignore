@@ -2,6 +2,7 @@ node_modules
 src
 tests
 coverage
+reports
 .nyc_output
 .mocharc.json
 .vscode
@@ -10,6 +11,7 @@ coverage
 .eslintrc
 .gitignore
 .github
+.stryker-tmp
+stryker.config.json
 tsconfig.json
 tsconfig.eslint.json
-tsconfig.spec.json
