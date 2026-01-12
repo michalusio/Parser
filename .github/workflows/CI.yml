@@ -61,7 +61,7 @@ jobs:
       run: npm ci
 
     - name: Restore mutation incremental file
-      uses: actions/cache/restore@v4
+      uses: actions/cache/restore@v5
       with:
         path: |
           reports/stryker-incremental.json
@@ -71,7 +71,7 @@ jobs:
       run: npm run test:mutate
 
     - name: Cache mutation incremental file
-      uses: actions/cache/save@v4
+      uses: actions/cache/save@v5
       with:
         path: |
           reports/stryker-incremental.json
