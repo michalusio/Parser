@@ -33,7 +33,7 @@
     "@stryker-mutator/mocha-runner": "^9.4.0",
     "@stryker-mutator/typescript-checker": "^9.4.0",
     "@types/mocha": "10.0.10",
-    "@types/node": "25.0.6",
+    "@types/node": "25.0.9",
     "cross-env": "10.1.0",
     "eslint": "9.39.2",
     "mocha": "11.7.5",
