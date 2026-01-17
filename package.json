@@ -15,9 +15,11 @@
   "homepage": "https://github.com/michalusio/Parser#readme",
   "description": "A library of parser combinators, with which you can create your own parsers. The library will be continuously improved in time.",
   "scripts": {
-    "build": "tsc",
     "start": "tsc && node .",
-    "lint": "eslint . --ext .ts",
+    "lint": "eslint src --ext .ts",
+    "build": "tsc",
+    "minify": "esbuild dist/index.js --minify=true --bundle --outfile=dist/index.min.js",
+    "bundle": "npm run lint && npm run build && npm run minify",
     "test:mutate": "stryker run",
     "test:unit": "mocha",
     "test": "nyc -e '.ts' --r html -r lcov -r text npm run test:unit"
@@ -35,6 +37,7 @@
     "@types/mocha": "10.0.10",
     "@types/node": "25.0.9",
     "cross-env": "10.1.0",
+    "esbuild": "0.27.2",
     "eslint": "9.39.2",
     "mocha": "11.7.5",
     "nyc": "17.1.0",
