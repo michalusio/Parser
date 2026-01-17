@@ -11,6 +11,6 @@ export default defineConfig(
     languageOptions: {
 			parser: tseslint.parser,
 		},
-    ignores: ["./node_modules/*", "./dist/*"]
+    ignores: ["./node_modules/*", "./dist/*", "./dist-esm/*"]
   }
 );

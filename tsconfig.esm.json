@@ -1,9 +1,10 @@
 {
   "compilerOptions": {
-    "outDir": "dist",
+    "outDir": "dist-esm",
     "rootDir": "src",
     "target": "es2021",
-    "module": "commonjs",
+    "module": "es2022",
+    "moduleResolution": "bundler",
     "noEmitOnError": true,
     "skipLibCheck": true,
     "alwaysStrict": true,

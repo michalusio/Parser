@@ -1,6 +1,6 @@
 {
   "name": "parser-combinators",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "license": "ISC",
   "maintainers": [
     "Micha_i"
@@ -18,8 +18,8 @@
     "start": "tsc && node .",
     "lint": "eslint src --ext .ts",
     "build": "tsc",
-    "minify": "esbuild dist/index.js --minify=true --bundle --outfile=dist/index.min.js",
-    "bundle": "npm run lint && npm run build && npm run minify",
+    "build-esm": "tsc --project tsconfig.esm.json",
+    "bundle": "npm run lint && npm run build && npm run build-esm",
     "test:mutate": "stryker run",
     "test:unit": "mocha",
     "test": "nyc -e '.ts' --r html -r lcov -r text npm run test:unit"
@@ -27,6 +27,7 @@
   "author": "Micha_i <isalski.michal@gmail.com> (https://github.com/michalusio)",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "type": "commonjs",
   "engines": {
     "node": ">=18"
   },

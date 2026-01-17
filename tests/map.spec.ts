@@ -1,6 +1,6 @@
 import * as assert from 'assert';
 
-import { map, str } from '../src/parsers';
+import { map, str } from '../src/parsers/index';
 import { Context, isFailure } from '../src/types';
 
 describe('map', function() {
