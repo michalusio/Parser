@@ -2,18 +2,6 @@ import { Context, failure, isFailure, Parser, Result, success, Token } from '../
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import type { any } from './any';
 
-export const shouldPerformFusions = () => performFusions;
-
-let performFusions = true;
-/**
- * Disables all parser combinator fusions.
- * 
- * Should probably be used only for testing performance.
- */
-export const toggleFusions = (value: boolean) => {
-  performFusions = value;
-};
-
 /** Allows to make a condition on the result of the parsing function.
  * @returns A parser returning the same but also performing a given check on the result.
  */
@@ -91,5 +79,16 @@ export function lookaround<T>(parser: Parser<T>): Parser<void> {
       return success(ctx, void 0);
     }
     return failure(ctx, result.expected, ['lookaround', ...result.history]);
+  }
+}
+
+/**
+ * Turns a function creating a parser into a parser. Useful for recursive grammars.
+ */
+export function lazy<T>(parserGetter: () => Parser<T>): Parser<T> {
+  let parser: Parser<T>;
+  return (ctx) => {
+    parser ??= parserGetter();
+    return parser(ctx);
   }
 }

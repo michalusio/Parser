@@ -1,8 +1,6 @@
 import { Context, Failure, failure, isFailure, Parser, Result } from '../types';
-import { anyString, OptimizableStrParser } from './anyString';
-import { shouldPerformFusions } from './utilities';
-
-const optimizableTypes = ['str', 'stri', 'anyString'];
+import { anyString } from './anyString';
+import { shouldPerformFusions, allStringParsers } from './optimizations';
 
 /** Parses the input using any passed parser, trying from left to right.
  * @returns A parser returning the result of the first parser that succeeds, or the failure that has come the furthest.
@@ -21,18 +19,8 @@ export function any<T>(...parsers: [Parser<T>]): Parser<T>
 export function any<T>(...parsers: Parser<T>[]): Parser<T>
 export function any<T>(...parsers: Parser<T>[]): Parser<T> {
     let marker = {};
-    if (shouldPerformFusions() && parsers.every(p => 'parserType' in p && typeof p.parserType === 'string' && optimizableTypes.includes(p.parserType))) {
-        const optimizableParsers = parsers as OptimizableStrParser<string>[];
-        const matches = optimizableParsers.flatMap(p => {
-            switch (p.parserType) {
-                case 'anyString':
-                    return p.matches;
-                case 'str':
-                    return [[p.match, false] as const];
-                case 'stri':
-                    return [[p.match, true] as const];
-            }
-        });
+    if (shouldPerformFusions() && allStringParsers(parsers)) {
+        const matches = parsers.flatMap(p => p.matches);
         // Not fusing if not enough matches
         // We do pass the matches forward though, because a parser above may want to fuse
         if (matches.length > 10) {

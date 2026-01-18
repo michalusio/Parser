@@ -1,10 +1,12 @@
-import { any, between, regex, seq, str, wspaces, zeroOrMany } from '../src/parsers';
-import { Context, Result } from '../src/types';
+import { any, between, lazy, regex, seq, str, zeroOrMany } from '../src/parsers';
+import { Parser } from '../src/types';
 import { ParseText } from '../src/parser';
 import { json_sample1kne } from './samples/1K_json_no_escaping';
 import { json_sample1k } from './samples/1K_json';
 import { json_sample10k } from './samples/10K_json';
 import { mochaLog } from './logging.spec';
+
+const WhiteSpace = regex(/\s*/m, 'whitespace');
 
 const True = str("true");
 const False = str("false");
@@ -13,47 +15,43 @@ const LCurly = str("{");
 const RCurly = str("}");
 const LSquare = str("[");
 const RSquare = str("]");
-const Comma = between(wspaces, str(","), wspaces);
+const Comma = str(",");
 const Colon = str(":");
 
 const StringLiteral = regex(/"(?:[^\\"]|\\(?:[bfnrtv"\\/]|u[0-9a-fA-F]{4}))*"/, 'string literal');
 const NumberLiteral = regex(/-?(?:0|[1-9]\d*)(?:\.\d+)?(?:[eE][+-]?\d+)?/, 'number literal');
 
+const JArray: Parser<unknown> = lazy(() => seq(
+    LSquare,
+    WhiteSpace,
+    zeroOrMany(Value, seq(WhiteSpace, Comma, WhiteSpace)),
+    WhiteSpace,
+    RSquare
+));
+
+const JObject: Parser<unknown> = lazy(() => seq(
+    LCurly,
+    WhiteSpace,
+    zeroOrMany(ObjectEntry, seq(WhiteSpace, Comma, WhiteSpace)),
+    WhiteSpace,
+    RCurly
+));
+
 const Value = any(
+    StringLiteral,
+    NumberLiteral,
+    JObject,
+    JArray,
     True,
     False,
     Null,
-    StringLiteral,
-    NumberLiteral,
-    JObject(),
-    JArray()
 );
 
-const ObjectEntry = seq(StringLiteral, wspaces, Colon, wspaces, Value);
+const ObjectEntry = seq(StringLiteral, WhiteSpace, Colon, WhiteSpace, Value);
 
-function JArray() {
-    return (ctx: Context): Result<unknown[]> => seq(
-        LSquare,
-        wspaces,
-        zeroOrMany(Value, Comma),
-        wspaces,
-        RSquare
-    )(ctx);
-};
+const json = between(WhiteSpace, Value, WhiteSpace);
 
-function JObject() {
-    return (ctx: Context): Result<unknown[]> => seq(
-        LCurly,
-        wspaces,
-        zeroOrMany(ObjectEntry, Comma),
-        wspaces,
-        RCurly
-    )(ctx);
-}
-
-const json = between(wspaces, any(JObject(), JArray()), wspaces);
-
-xdescribe('json', function() {
+describe('json', function() {
     this.timeout(5000);
     this.slow(2000);
 

@@ -1,27 +1,24 @@
 import { Context, failure, Parser, Result, success } from "../types";
-import { StrIParser, StrParser } from "./str";
 
-type AnyStringParser<T> = Parser<T> & {
+export type AnyStringParser<T> = Parser<T> & {
     parserType: 'anyString',
     /**
      * if flag is true, match case-insensitive
      */
-    matches: (readonly [string, boolean])[];
+    matches: (readonly [string, boolean, (v: string) => unknown])[];
 };
-
-export type OptimizableStrParser<T> = AnyStringParser<T> | StrParser<T> | StrIParser<T>;
 
 /**
  * Optimization for `any(str(), str(), ...)` which replaces the parser tree with one parser which tries all strings together
  */
-export function anyString<T extends string>(matches: (readonly [string, boolean])[]): AnyStringParser<T> {
+export function anyString<T>(matches: (readonly [string, boolean, (v: string) => unknown])[]): AnyStringParser<T> {
     const lastMatchInQuotes = `'${matches[matches.length - 1][0]}'`;
     let tree: SearchNode
     return Object.assign((ctx: Context): Result<T> => {
         tree ??= createSearchTree(matches);
         const result = searchThroughTree(tree, ctx.text, ctx.index);
         if (result) {
-            return success({ ...ctx, index: result.end }, matches[result.matchIndex][0] as T);
+            return success({ ...ctx, index: result.end }, matches[result.matchIndex][2](matches[result.matchIndex][0]) as T);
         } else {
             return failure(ctx, lastMatchInQuotes, ['any', lastMatchInQuotes]);
         }
@@ -32,16 +29,18 @@ type SearchNode = {
     matchIndex?: number;
 } & Map<string, SearchNode>;
 
-function createSearchTree(matches: (readonly [string, boolean])[]): SearchNode {
+function createSearchTree(matches: (readonly [string, boolean, (v: string) => unknown])[]): SearchNode {
     const tree: SearchNode = new Map();
     matches.forEach((match, index) => addMatchToTree(tree, match, index));
     return tree;    
 }
 
-function addMatchToTree(node: SearchNode, match: readonly [string, boolean], idIndex: number, charIndex: number = 0) {
+function addMatchToTree(node: SearchNode, match: readonly [string, boolean, (v: string) => unknown], idIndex: number, charIndex: number = 0) {
     if (charIndex >= match[0].length) {
         if (node.matchIndex != undefined) {
-            node.matchIndex = Math.min(node.matchIndex, idIndex);
+            if (node.matchIndex > idIndex) {
+                node.matchIndex = idIndex;
+            }
         } else {
             node.matchIndex = idIndex;
         }

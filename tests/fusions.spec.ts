@@ -1,9 +1,8 @@
 import * as assert from 'assert';
-import { any } from '../src/parsers/any';
-import { str, stri } from '../src/parsers/str';
-import { toggleFusions } from '../src/parsers/utilities';
+import { any, str, stri, map } from '../src/parsers';
 import { Context, Parser } from '../src/types';
 import { mochaLog } from './logging.spec';
+import { toggleFusions } from '../src/parsers/optimizations';
 
 describe('fusions should be faster than non-fused parsers', () => {
     it(`case: any(any(str('QeQMTvqJuS'), stri('ErEmTDUUIF')), any(str('IoOYSLNPlM'), stri('SpFMUWpzHs')), any(str('QeQMTvqJuS'), stri('ErEmTDUUIF')), any(str('IoOYSLNPlM'), stri('SpFMUWpzHs')), any(str('QeQMTvqJuS'), stri('ErEmTDUUIF')), any(str('IoOYSLNPlM'), stri('SpFMUWpzHs'))) -> 'ImWebhqJMcErEmTDUUIFcFpsAJhfwqXN' x 10_000`, function() {
@@ -104,6 +103,79 @@ describe('fusions should be faster than non-fused parsers', () => {
         checkFusion(parserFused, parserNonFused, context, 1000);
     });
 
+    it(`case: any(map(str('jKUuKrxuKm'), () => 1), ..., map(stri('olFldPZKYF'), () => 30)) -> 'ImWebhqJMcErEmTDUUIFcFpsAJhfwqXN' x 1_000`, function() {
+        const parserFused = any(
+            map(str('jKUuKrxuKm'), () => 1),
+            map(str('ywNOFmhnRh'), () => 2),
+            map(str('nIiYyVBaOz'), () => 3),
+            map(str('qmCdSCzAwb'), () => 4),
+            map(str('epLrNxBQgl'), () => 5),
+            map(str('JQNUEVNvco'), () => 6),
+            map(str('nmGuoTWDJz'), () => 7),
+            map(str('SaLTTYuqbY'), () => 8),
+            map(str('CpSJjcYaPh'), () => 9),
+            map(str('xILcYpOLpx'), () => 10),
+            map(str('yqFlmbSFPK'), () => 11),
+            map(stri('sixiYxJizK'), () => 12),
+            map(stri('yjqLUEpuUJ'), () => 13),
+            map(stri('VeVxkVaqKv'), () => 14),
+            map(stri('qSCUWGxkHt'), () => 15),
+            map(stri('EuAPMOevXm'), () => 16),
+            map(stri('WsMosTuXWu'), () => 17),
+            map(stri('GqKKqoguqr'), () => 18),
+            map(stri('XISDJJlhpv'), () => 19),
+            map(stri('OWvRVXxZZr'), () => 20),
+            map(stri('EeeNViuver'), () => 21),
+            map(stri('NldKAvAKXW'), () => 22),
+            map(stri('bsTUlEosYW'), () => 23),
+            map(stri('CixASiwFRI'), () => 24),
+            map(stri('yNzvVcWver'), () => 25),
+            map(stri('xYVPlaaYRb'), () => 26),
+            map(stri('KbFIlLoCcB'), () => 27),
+            map(stri('XuVOIUlXSf'), () => 28),
+            map(stri('ylXTVvRuwO'), () => 29),
+            map(stri('olFldPZKYF'), () => 30),
+        );
+
+        toggleFusions(false);
+        const parserNonFused = any(
+            map(str('jKUuKrxuKm'), () => 1),
+            map(str('ywNOFmhnRh'), () => 2),
+            map(str('nIiYyVBaOz'), () => 3),
+            map(str('qmCdSCzAwb'), () => 4),
+            map(str('epLrNxBQgl'), () => 5),
+            map(str('JQNUEVNvco'), () => 6),
+            map(str('nmGuoTWDJz'), () => 7),
+            map(str('SaLTTYuqbY'), () => 8),
+            map(str('CpSJjcYaPh'), () => 9),
+            map(str('xILcYpOLpx'), () => 10),
+            map(str('yqFlmbSFPK'), () => 11),
+            map(stri('sixiYxJizK'), () => 12),
+            map(stri('yjqLUEpuUJ'), () => 13),
+            map(stri('VeVxkVaqKv'), () => 14),
+            map(stri('qSCUWGxkHt'), () => 15),
+            map(stri('EuAPMOevXm'), () => 16),
+            map(stri('WsMosTuXWu'), () => 17),
+            map(stri('GqKKqoguqr'), () => 18),
+            map(stri('XISDJJlhpv'), () => 19),
+            map(stri('OWvRVXxZZr'), () => 20),
+            map(stri('EeeNViuver'), () => 21),
+            map(stri('NldKAvAKXW'), () => 22),
+            map(stri('bsTUlEosYW'), () => 23),
+            map(stri('CixASiwFRI'), () => 24),
+            map(stri('yNzvVcWver'), () => 25),
+            map(stri('xYVPlaaYRb'), () => 26),
+            map(stri('KbFIlLoCcB'), () => 27),
+            map(stri('XuVOIUlXSf'), () => 28),
+            map(stri('ylXTVvRuwO'), () => 29),
+            map(stri('olFldPZKYF'), () => 30),
+        );
+        toggleFusions(true);
+
+        const context: Context = { index: 0, path: '', text: 'ImWebhqJMcErEmTDUUIFcFpsAJhfwqXN' };
+
+        checkFusion(parserFused, parserNonFused, context, 1000);
+    });
 });
 
 function checkFusion<T>(parserFused: Parser<T>, parserNonFused: Parser<T>, context: Context, times: number) {

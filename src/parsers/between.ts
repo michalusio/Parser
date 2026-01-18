@@ -1,18 +1,22 @@
-import { Context, failure, isFailure, Parser, Result } from '../types';
-import { seq } from './seq';
+import { Context, isFailure, Parser, Result, success } from '../types';
 
 /** Parses a sequence of three parsers.
  * @returns A parser returning only the middle parser's result.
  */
 export function between<T, U, V>(left: Parser<U>, parser: Parser<T>, right: Parser<V>): Parser<T> {
-  const sequence = seq(left, parser, right);
   return (ctx: Context): Result<T> => {
-      const res = sequence(ctx);
-      if (isFailure(res)) {
-          const newHistory = [...res.history];
-          newHistory.splice(0, 1);
-          return failure(res.ctx, res.expected, ['between', ...newHistory]);
+      const resLeft = left(ctx);
+      if (isFailure(resLeft)) {
+          return resLeft;
       }
-      return { ...res, value: res.value[1] };
+      const resParse = parser(resLeft.ctx);
+      if (isFailure(resParse)) {
+          return resParse;
+      }
+      const resRight = right(resParse.ctx);
+      if (isFailure(resRight)) {
+        return resRight;
+      }
+      return success(resRight.ctx, resParse.value);
   }
 }

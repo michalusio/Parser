@@ -1,14 +1,9 @@
 import { Context, failure, Parser, Result, success } from '../types';
 
-export type StrParser<T> = Parser<T> & {
-    parserType: 'str',
-    match: T
-};
-
 /** Parses a string and returns it as a result of the parse.
  * @returns A parser parsing a given string, case-sensitive.
  */
-export function str<T extends string>(match: T): StrParser<T> {
+export function str<T extends string>(match: T): Parser<T> {
     const inQuotes = `'${match}'`;
     return Object.assign((ctx: Context): Result<T> => {
       if (ctx.text.startsWith(match, ctx.index)){
@@ -17,20 +12,15 @@ export function str<T extends string>(match: T): StrParser<T> {
       else {
           return failure(ctx, inQuotes, [inQuotes]);
       }
-  }, { parserType: 'str', match }) as StrParser<T>;
+  }, { parserType: 'anyString', matches: [[match, false, (v: string) => v]] });
 }
-
-export type StrIParser<T> = Parser<T> & {
-    parserType: 'stri',
-    match: T
-};
 
 const collator = new Intl.Collator('en', { sensitivity: 'accent' });
 
 /** Parses a string case-insensitively and returns it as a result of the parse.
  * @returns A parser parsing a given string, case-insensitive.
  */
-export function stri<T extends string>(match: T): StrIParser<Lowercase<T>> {
+export function stri<T extends string>(match: T): Parser<Lowercase<T>> {
     const lowercase = match.toLowerCase();
     const inQuotes = `'${lowercase}'`;
     return Object.assign((ctx: Context): Result<Lowercase<T>> => {
@@ -41,5 +31,5 @@ export function stri<T extends string>(match: T): StrIParser<Lowercase<T>> {
       else {
           return failure(ctx, inQuotes, [inQuotes]);
       }
-  }, { parserType: 'stri', match: lowercase }) as StrIParser<Lowercase<T>>;
+  }, { parserType: 'anyString', matches: [[lowercase, true, (v: string) => v]] });
 }
