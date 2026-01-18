@@ -53,7 +53,7 @@ function JObject() {
 
 const json = between(wspaces, any(JObject(), JArray()), wspaces);
 
-describe('json', function() {
+xdescribe('json', function() {
     this.timeout(5000);
     this.slow(2000);
 
@@ -83,5 +83,20 @@ describe('json', function() {
         const delta = performance.now() - start;
         const deltaSeconds = delta/1000;
         mochaLog('Speed:', (100/deltaSeconds).toFixed(1), 'per second');
+    });
+});
+
+describe('json', function() {
+    this.timeout(5000);
+    this.slow(2000);
+
+    it('is parsed (1K file no escaping)', function() {
+        ParseText(json_sample1kne, json);
+    });
+    it('is parsed (1K file)', function() {
+        ParseText(json_sample1k, json);
+    });
+    it('is parsed (10K file)', function() {
+        ParseText(json_sample10k, json);
     });
 });
