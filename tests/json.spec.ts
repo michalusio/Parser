@@ -87,9 +87,6 @@ xdescribe('json', function() {
 });
 
 describe('json', function() {
-    this.timeout(5000);
-    this.slow(2000);
-
     it('is parsed (1K file no escaping)', function() {
         ParseText(json_sample1kne, json);
     });
