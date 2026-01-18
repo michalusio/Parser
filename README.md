@@ -1,7 +1,6 @@
 ## Parser Combinators
 
 [![CI](https://github.com/michalusio/Parser/actions/workflows/CI.yml/badge.svg)](https://github.com/michalusio/Parser/actions/workflows/CI.yml)
-[![CodeQL](https://github.com/michalusio/Parser/actions/workflows/codeql-analysis.yml/badge.svg?branch=master)](https://github.com/michalusio/Parser/actions/workflows/codeql-analysis.yml)
 [![codecov](https://codecov.io/gh/michalusio/Parser/branch/master/graph/badge.svg?token=gtTR0hPodY)](https://codecov.io/gh/michalusio/Parser)
 
 ![NPM](https://img.shields.io/npm/l/parser-combinators)
