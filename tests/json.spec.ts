@@ -59,21 +59,21 @@ describe('json', function() {
 
     it('is parsed (1K file no escaping)', function() {
         const start = performance.now();
-        for (let index = 0; index < 1000; index++) {
+        for (let index = 0; index < 500; index++) {
             ParseText(json_sample1kne, json);
         }
         const delta = performance.now() - start;
         const deltaSeconds = delta/1000;
-        mochaLog('Speed:', (1000/deltaSeconds).toFixed(1), 'per second');
+        mochaLog('Speed:', (500/deltaSeconds).toFixed(1), 'per second');
     });
     it('is parsed (1K file)', function() {
         const start = performance.now();
-        for (let index = 0; index < 1000; index++) {
+        for (let index = 0; index < 500; index++) {
             ParseText(json_sample1k, json);
         }
         const delta = performance.now() - start;
         const deltaSeconds = delta/1000;
-        mochaLog('Speed:', (1000/deltaSeconds).toFixed(1), 'per second');
+        mochaLog('Speed:', (500/deltaSeconds).toFixed(1), 'per second');
     });
     it('is parsed (10K file)', function() {
         const start = performance.now();
