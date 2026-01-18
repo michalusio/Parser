@@ -153,7 +153,7 @@ describe('any', function() {
 
       // Assert
       assert.ok(isFailure(result));
-      assert.deepEqual(result.history, ['\'b\'']);
+      assert.deepEqual(result.history, ['any', '\'b\'']);
     });
 
     describe('with longest expected history', () => {

@@ -9,6 +9,10 @@ export function many<T>(parser: Parser<T>): Parser<T[]> {
         while (true) {
             const res = parser(ctx);
             if (isFailure(res)) {
+                const surelyIndex = res.history.findIndex(h => h === 'surely');
+                if (surelyIndex >= 0) {
+                    return failure(res.ctx, res.expected, ['many', ...res.history.slice(0, surelyIndex), ...res.history.slice(surelyIndex + 1)]);
+                }
                 return success(ctx, results);
             }
             ctx = res.ctx;
@@ -29,6 +33,10 @@ export function zeroOrMany<T, V>(
             const results: T[] = [];
             const res = item(ctx);
             if (isFailure(res)) {
+                const surelyIndex = res.history.findIndex(h => h === 'surely');
+                if (surelyIndex >= 0) {
+                    return failure(res.ctx, res.expected, ['zeroOrMany', ...res.history.slice(0, surelyIndex), ...res.history.slice(surelyIndex + 1)]);
+                }
                 return success(ctx, results);
             }
             ctx = res.ctx;
@@ -36,10 +44,18 @@ export function zeroOrMany<T, V>(
             while (true) {
                 const resSep = separator(ctx);
                 if (isFailure(resSep)) {
+                    const surelyIndex = resSep.history.findIndex(h => h === 'surely');
+                    if (surelyIndex >= 0) {
+                        return failure(resSep.ctx, resSep.expected, ['zeroOrMany', ...resSep.history.slice(0, surelyIndex), ...resSep.history.slice(surelyIndex + 1)]);
+                    }
                     return success(ctx, results);
                 }
                 const res = item(resSep.ctx);
                 if (isFailure(res)) {
+                    const surelyIndex = res.history.findIndex(h => h === 'surely');
+                    if (surelyIndex >= 0) {
+                        return failure(res.ctx, res.expected, ['zeroOrMany', ...res.history.slice(0, surelyIndex), ...res.history.slice(surelyIndex + 1)]);
+                    }
                     return success(ctx, results);
                 }
                 ctx = res.ctx;
@@ -67,10 +83,18 @@ export function oneOrMany<T, V>(
             while (true) {
                 const resSep = separator(ctx);
                 if (isFailure(resSep)) {
+                    const surelyIndex = resSep.history.findIndex(h => h === 'surely');
+                    if (surelyIndex >= 0) {
+                        return failure(resSep.ctx, resSep.expected, ['oneOrMany', ...resSep.history.slice(0, surelyIndex), ...resSep.history.slice(surelyIndex + 1)]);
+                    }
                     return success(ctx, results);
                 }
                 const res = item(resSep.ctx);
                 if (isFailure(res)) {
+                    const surelyIndex = res.history.findIndex(h => h === 'surely');
+                    if (surelyIndex >= 0) {
+                        return failure(res.ctx, res.expected, ['oneOrMany', ...res.history.slice(0, surelyIndex), ...res.history.slice(surelyIndex + 1)]);
+                    }
                     return success(ctx, results);
                 }
                 ctx = res.ctx;
@@ -87,6 +111,10 @@ export function oneOrMany<T, V>(
             while (true) {
                 const res = item(ctx);
                 if (isFailure(res)) {
+                    const surelyIndex = res.history.findIndex(h => h === 'surely');
+                    if (surelyIndex >= 0) {
+                        return failure(res.ctx, res.expected, ['oneOrMany', ...res.history.slice(0, surelyIndex), ...res.history.slice(surelyIndex + 1)]);
+                    }
                     return success(ctx, results);
                 }
                 ctx = res.ctx;
@@ -112,10 +140,18 @@ export function oneOrManyRed<T, V, U = T>(
         while (true) {
             const resSep = separator(ctx);
             if (isFailure(resSep)) {
+                const surelyIndex = resSep.history.findIndex(h => h === 'surely');
+                if (surelyIndex >= 0) {
+                    return failure(resSep.ctx, resSep.expected, ['oneOrManyRed', ...resSep.history.slice(0, surelyIndex), ...resSep.history.slice(surelyIndex + 1)]);
+                }
                 return success(ctx, result);
             }
             const res = item(resSep.ctx);
             if (isFailure(res)) {
+                const surelyIndex = res.history.findIndex(h => h === 'surely');
+                if (surelyIndex >= 0) {
+                    return failure(res.ctx, res.expected, ['oneOrManyRed', ...res.history.slice(0, surelyIndex), ...res.history.slice(surelyIndex + 1)]);
+                }
                 return success(ctx, result);
             }
             ctx = res.ctx;

@@ -10,7 +10,7 @@ import { isFailure, ParseError, Parser } from './types';
 export function ParseText<T>(text: string, parser: Parser<T>, path = ''): T {
     const res = parser({text, path, index: 0});
     if (isFailure(res)) {
-        throw new ParseError(`Parse error, expected ${[...res.history].pop()} at char ${res.ctx.index}`, text, res.ctx.index, res.history);
+        throw new ParseError(`Parse error, expected ${res.history[res.history.length - 1]} at char ${res.ctx.index}`, text, res.ctx.index, res.history);
     }
     if (res.ctx.index !== text.length) {
         throw new ParseError(`Parse error, expected end of text at char ${res.ctx.index}`, text, res.ctx.index, []);

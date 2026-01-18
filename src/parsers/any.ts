@@ -34,8 +34,9 @@ export function any<T>(...parsers: Parser<T>[]): Parser<T> {
         for (const parser of parsers) {
             const res = parser(ctx);
             if (isFailure(res)) {
-                if (res.history.includes('surely')) {
-                    return failure(res.ctx, res.expected, res.history.filter(h => h !== 'surely'));
+                const surelyIndex = res.history.findIndex(h => h === 'surely');
+                if (surelyIndex >= 0) {
+                    return failure(res.ctx, res.expected, ['any', ...res.history.slice(0, surelyIndex), ...res.history.slice(surelyIndex + 1)]);
                 }
                 expected.push(res);
             }
