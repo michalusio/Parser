@@ -16,7 +16,7 @@ jobs:
         node-version: [18.x, 20.x, 22.x, 24.x]
 
     steps:
-    - uses: actions/checkout@v6.0.1
+    - uses: actions/checkout@v6.0.2
 
     - name: Using Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v6.2.0
@@ -49,7 +49,7 @@ jobs:
     needs: build
 
     steps:
-    - uses: actions/checkout@v6.0.1
+    - uses: actions/checkout@v6.0.2
 
     - name: Using Node.js 24.x
       uses: actions/setup-node@v6.2.0
