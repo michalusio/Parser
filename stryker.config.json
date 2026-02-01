@@ -19,5 +19,6 @@
   "incremental": true,
   "mutate": [
     "src/**/*.{js,ts,jsx,tsx,cts,mts}"
-  ]
+  ],
+  "ignoreStatic": true
 }

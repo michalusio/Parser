@@ -35,9 +35,9 @@ describe('recoverBySkippingChars', function() {
       assert.deepStrictEqual(result.value, 'a');
       assert.deepStrictEqual(result.ctx, { text: 'bcabc', index: 3, path: '' });
     });
-    it(`case: recoverBySkippingChars(str('a'), 3) -> 'bcabca'`, () => {
+    it(`case: recoverBySkippingChars(str('a'), 3) -> 'bcbaca'`, () => {
       // Arrange
-      const ctx: Context = { text: 'bcabca', index: 0, path: '' };
+      const ctx: Context = { text: 'bcbaca', index: 0, path: '' };
       const parser = recoverBySkippingChars(str('a'), 3);
 
       // Act
@@ -47,7 +47,7 @@ describe('recoverBySkippingChars', function() {
       assert.ok(!isFailure(result));
       
       assert.deepStrictEqual(result.value, 'a');
-      assert.deepStrictEqual(result.ctx, { text: 'bcabca', index: 3, path: '' });
+      assert.deepStrictEqual(result.ctx, { text: 'bcbaca', index: 4, path: '' });
     });
   });
 

@@ -2,7 +2,7 @@ import 'mocha';
 
 import * as assert from 'assert';
 
-import { regex } from '../src/parsers';
+import { regex, seq, str } from '../src/parsers';
 import { Context, isFailure } from '../src/types';
 import { sanitize } from './sanitization';
 
@@ -31,6 +31,36 @@ describe('regex', function() {
       });
     });
   });
+
+  describe('should fail', () => {
+    it(`case: seq(str('ar'), regex('ar', 'regex')): '${sanitize('arbbara')}' -> '${sanitize('ar')}'`, () => {
+      // Arrange
+      const context: Context = { text: 'arbbara', index: 0, path: '' };
+      const parser = seq(str('ar'), regex('ar', 'regex'));
+
+      // Act
+      const result = parser(context);
+
+      // Assert
+      assert.ok(isFailure(result));
+      assert.deepStrictEqual(result.ctx, { text: 'arbbara', index: 'ar'.length, path: '' });
+      assert.deepStrictEqual(result.history, ['seq', 'regex']);
+    });
+
+    it(`case: seq(str('ar'), regex(${sanitize(/ar/g)}, 'regex')): '${sanitize('arbbara')}' -> '${sanitize('ar')}'`, () => {
+      // Arrange
+      const context: Context = { text: 'arbbara', index: 0, path: '' };
+      const parser = seq(str('ar'), regex(/ar/g, 'regex'));
+
+      // Act
+      const result = parser(context);
+
+      // Assert
+      assert.ok(isFailure(result));
+      assert.deepStrictEqual(result.ctx, { text: 'arbbara', index: 'ar'.length, path: '' });
+      assert.deepStrictEqual(result.history, ['seq', 'regex']);
+    });
+  })
 
   describe('should fail', () => {
     const testCases = [

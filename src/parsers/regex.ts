@@ -8,7 +8,7 @@ export function regex(match: RegExp | string, expected: string): Parser<string> 
     return (ctx: Context): Result<string> => {
         regexp.lastIndex = ctx.index;
         const regexMatch = regexp.exec(ctx.text);
-        if (regexMatch !== null && regexMatch.index === ctx.index) {
+        if (regexMatch !== null) {
             return success({...ctx, index: ctx.index + regexMatch[0].length}, regexMatch[0]);
         }
         else {

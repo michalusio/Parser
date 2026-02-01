@@ -37,13 +37,7 @@ function createSearchTree(matches: (readonly [string, boolean, (v: string) => un
 
 function addMatchToTree(node: SearchNode, match: readonly [string, boolean, (v: string) => unknown], idIndex: number, charIndex: number = 0) {
     if (charIndex >= match[0].length) {
-        if (node.matchIndex != undefined) {
-            if (node.matchIndex > idIndex) {
-                node.matchIndex = idIndex;
-            }
-        } else {
-            node.matchIndex = idIndex;
-        }
+        node.matchIndex ??= idIndex;
     } else {
         const char = match[0][charIndex];
         const lowercase = char.toLowerCase();
@@ -59,15 +53,17 @@ function addMatchToTree(node: SearchNode, match: readonly [string, boolean, (v: 
                 addMatchToTree(upper, match, idIndex, charIndex + 1);
             }
         } else {
-            const charNode = node.get(char) ?? newNode;
-            node.set(char, charNode);
-            const lower = node.get(lowercase);
-            if (lower === node.get(uppercase)) {
-                const copy: SearchNode = new Map(lower!.entries());
-                copy.matchIndex = lower!.matchIndex;
-                node.set(uppercase, copy);
+            node.set(char, node.get(char) ?? newNode);
+            if (lowercase !== uppercase) {
+                const lower = node.get(lowercase);
+                const upper = node.get(uppercase);
+                if (lower != null && lower === upper) {
+                    const copy: SearchNode = new Map(lower!.entries());
+                    copy.matchIndex = lower!.matchIndex;
+                    node.set(uppercase, copy);
+                }
             }
-            addMatchToTree(charNode, match, idIndex, charIndex + 1);
+            addMatchToTree(node.get(char)!, match, idIndex, charIndex + 1);
         }
     }
 }

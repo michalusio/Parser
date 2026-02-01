@@ -49,6 +49,7 @@ describe('exhaust', function() {
 
       // Assert
       assert.ok(isFailure(result));
+      assert.deepStrictEqual(result.history, ['exhaust', "'a'"]);
     });
   });
 });

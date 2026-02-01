@@ -35,6 +35,7 @@ export function any<T>(...parsers: Parser<T>[]): Parser<T> {
             const res = parser(ctx);
             if (isFailure(res)) {
                 const surelyIndex = res.history.findIndex(h => h === 'surely');
+                // Stryker disable next-line EqualityOperator: The > mutant results in an equivalent mutant
                 if (surelyIndex >= 0) {
                     return failure(res.ctx, res.expected, ['any', ...res.history.slice(0, surelyIndex), ...res.history.slice(surelyIndex + 1)]);
                 }

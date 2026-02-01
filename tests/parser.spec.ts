@@ -24,6 +24,7 @@ describe('ParseText', () => {
             if (!(e instanceof ParseError)) {
                 assert.fail('Error should have been a ParseError');
             }
+            assert.deepStrictEqual(e.history, ['seq', "'over'"]);
             assert.equal(e.getPrettyErrorMessage(), 'Parse error, expected \'over\' at char 15 (line 1, col 16):\nLazy fox jumps under a lazy dog\n---------------^');
         }
     });
@@ -41,6 +42,7 @@ describe('ParseText', () => {
             if (!(e instanceof ParseError)) {
                 assert.fail('Error should have been a ParseError');
             }
+            assert.deepStrictEqual(e.history, []);
             assert.equal(e.getPrettyErrorMessage(), 'Parse error, expected end of text at char 30 (line 1, col 31):\nLazy fox jumps over a lazy dog or something\n------------------------------^');
         }
     });

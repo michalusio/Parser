@@ -21,6 +21,8 @@ export type Failure = Readonly<{
   history: string[];
 }>;
 
+export type ParseResult<T extends Parser<unknown>> = T extends Parser<infer P> ? P : never;
+
 export type TokenRange = {
     start: number, 
     end: number

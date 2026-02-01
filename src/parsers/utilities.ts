@@ -9,7 +9,8 @@ export function ref<T>(parser: Parser<T>, check: ((p: T) => boolean), expected?:
   return (ctx: Context): Result<T> => {
       const res = parser(ctx);
       if (!isFailure(res) && !check(res.value)) {
-          return failure(res.ctx, expected ?? 'check', [`ref: ${expected ?? 'check'}`]);
+          const phrase = expected ?? 'check';
+          return failure(res.ctx, phrase, [`ref: ${phrase}`]);
       }
       return res;
   }

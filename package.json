@@ -1,6 +1,6 @@
 {
   "name": "parser-combinators",
-  "version": "1.2.5",
+  "version": "1.2.6",
   "license": "ISC",
   "maintainers": [
     "Micha_i"
@@ -32,9 +32,9 @@
     "node": ">=18"
   },
   "devDependencies": {
-    "@stryker-mutator/core": "^9.4.0",
-    "@stryker-mutator/mocha-runner": "^9.4.0",
-    "@stryker-mutator/typescript-checker": "^9.4.0",
+    "@stryker-mutator/core": "^9.5.0",
+    "@stryker-mutator/mocha-runner": "^9.5.0",
+    "@stryker-mutator/typescript-checker": "^9.5.0",
     "@types/mocha": "10.0.10",
     "@types/node": "25.1.0",
     "cross-env": "10.1.0",
