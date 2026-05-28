@@ -17,7 +17,7 @@ A library of parser combinators, with which you can create your own parsers.
 #### This package:
 
 - Has full TypeScript support and is made with `strict` mode on
-- Is thoroughly tested
+- Is thoroughly tested (100% Mutation test coverage)
 - Is made in the _Simplicity first_ philosophy
 - Will be continuously improved in time
 
