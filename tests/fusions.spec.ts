@@ -1,5 +1,5 @@
 import * as assert from 'assert';
-import { any, str, stri, map, regex } from '../src/parsers';
+import { any, str, stri, map, opt } from '../src/parsers';
 import { Context, isFailure, Parser } from '../src/types';
 import { mochaLog } from './logging.spec';
 import { allStringParsers, toggleFusions } from '../src/parsers/optimizations';
@@ -344,6 +344,59 @@ describe('anyString fusion should return the correct result', () => {
         assert.deepStrictEqual(result.value, 'abec');
         assert.deepStrictEqual(result.ctx, { text: 'abecadło', index: 'abec'.length, path: '' });
     });
+
+    it(`case: any(str('_bec'), ..., str('b')) -> '_becadło'`, function() {
+        
+        const parser = any(
+            str('_bec'),
+            str('b'),
+            str('b'),
+            str('b'),
+            str('b'),
+            str('b'),
+            stri('_bec'),
+            str('b'),
+            str('b'),
+            str('b'),
+            str('b'),
+            str('b'),
+        );
+
+        const context: Context = { index: 0, path: '', text: '_becadło' };
+
+        const result = parser(context);
+
+        assert.ok(!isFailure(result));
+        assert.deepStrictEqual(result.value, '_bec');
+        assert.deepStrictEqual(result.ctx, { text: '_becadło', index: '_bec'.length, path: '' });
+    });
+
+    it(`case: any(str('qbec'), ..., str('b')) -> 'abecadło'`, function() {
+        
+        const parser = any(
+            str('qbec'),
+            str('qbecadło'),
+            str('qbe'),
+            str('b'),
+            str('b'),
+            str('b'),
+            str('b'),
+            str('b'),
+            str('b'),
+            str('b'),
+            str('b'),
+            str('b'),
+        );
+
+        const context: Context = { index: 0, path: '', text: 'abecadło' };
+
+        const result = parser(context);
+
+        assert.ok(isFailure(result));
+        assert.deepEqual(result.ctx, context);
+        assert.equal(result.expected, "'b'");
+        assert.deepEqual(result.history, ['any', "'b'"]);
+    });
 });
 
 describe('allStringParsers', () => {
@@ -352,7 +405,7 @@ describe('allStringParsers', () => {
     });
     
     it('returns false if any parser is not string-like', () => {
-       assert.ok(!allStringParsers([str(''), regex('something', 'regex'), map(stri(''), () => '')])); 
+       assert.ok(!allStringParsers([str(''), opt(str('something')), map(stri(''), () => '')])); 
     });
 });
 

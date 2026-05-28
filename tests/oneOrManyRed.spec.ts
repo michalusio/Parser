@@ -1,6 +1,6 @@
 import * as assert from 'assert';
 
-import { any, str, surely, oneOrManyRed } from '../src/parsers';
+import { any, str, surely, oneOrManyRed, map, expectErase } from '../src/parsers';
 import { Context, isFailure } from '../src/types';
 
 describe('oneOrManyRed', function() {
@@ -55,10 +55,10 @@ describe('oneOrManyRed', function() {
   });
 
   describe('should fail when surely is there', () => {
-    it(`case: oneOrManyRed(str('b'), surely(str(',')), (l: string, r, s) => \`\${l}\${s}\${r}\`) -> 'bbbb'`, () => {
+    it(`case: oneOrManyRed(str('b'), map(surely(expect(str(','), 'test')), x => x), (l: string, r, s) => \`\${l}\${s}\${r}\`) -> 'bbbb'`, () => {
       // Arrange
       const ctx: Context = { text: 'bbbb', index: 0, path: '' };
-      const parser = oneOrManyRed(str('b'), surely(str(',')), (l: string, r, s) => `${l}${s}${r}`);
+      const parser = oneOrManyRed(str('b'), map(surely(expectErase(str(','), 'test')), x => x), (l: string, r, s) => `${l}${s}${r}`);
 
       // Act
       const result = parser(ctx);
@@ -66,7 +66,7 @@ describe('oneOrManyRed', function() {
       // Assert
       assert.ok(isFailure(result));
       assert.deepStrictEqual(result.ctx, { text: 'bbbb', index:1, path: '' });
-      assert.deepStrictEqual(result.history, ['oneOrManyRed', "','"]);
+      assert.deepStrictEqual(result.history, ['oneOrManyRed', "map", "test"]);
     });
 
     it(`case: oneOrManyRed(surely(str('b')), str(','), (l: string, r, s) => \`\${l}\${s}\${r}\`) -> 'c,b,b'`, () => {

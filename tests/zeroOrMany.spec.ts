@@ -1,6 +1,6 @@
 import * as assert from 'assert';
 
-import { any, seq, str, surely, zeroOrMany } from '../src/parsers';
+import { any, expect, expectErase, map, seq, str, surely, zeroOrMany } from '../src/parsers';
 import { Context, isFailure } from '../src/types';
 
 describe('zeroOrMany', function() {
@@ -100,10 +100,10 @@ describe('zeroOrMany', function() {
   });
 
   describe('should fail when surely is there', () => {
-    it(`case: zeroOrMany(surely(str('b'))) -> 'cbbb'`, () => {
+    it(`case: zeroOrMany(map(map(surely(expect(str('b'), 'test')), x => x), x => x)) -> 'cbbb'`, () => {
       // Arrange
       const ctx: Context = { text: 'cbbb', index: 0, path: '' };
-      const parser = zeroOrMany(surely(str('b')));
+      const parser = zeroOrMany(map(map(surely(expect(str('b'), 'test')), x => x), x => x));
 
       // Act
       const result = parser(ctx);
@@ -111,7 +111,7 @@ describe('zeroOrMany', function() {
       // Assert
       assert.ok(isFailure(result));
       assert.deepStrictEqual(result.ctx, { text: 'cbbb', index:0, path: '' });
-      assert.deepStrictEqual(result.history, ['zeroOrMany', "'b'"]);
+      assert.deepStrictEqual(result.history, ['zeroOrMany', 'map', 'map', "test", "'b'"]);
     });
 
     it(`case: zeroOrMany(surely(str('b'))) -> 'bbbc'`, () => {
@@ -128,10 +128,10 @@ describe('zeroOrMany', function() {
       assert.deepStrictEqual(result.history, ['zeroOrMany', "'b'"]);
     });
 
-    it(`case: zeroOrMany(str('b'), surely(str(','))) -> 'bbbb'`, () => {
+    it(`case: zeroOrMany(str('b'), map(surely(expectErase(str(','), 'test')), x => x)) -> 'bbbb'`, () => {
       // Arrange
       const ctx: Context = { text: 'bbbb', index: 0, path: '' };
-      const parser = zeroOrMany(str('b'), surely(str(',')));
+      const parser = zeroOrMany(str('b'), map(surely(expectErase(str(','), 'test')), x => x));
 
       // Act
       const result = parser(ctx);
@@ -139,7 +139,7 @@ describe('zeroOrMany', function() {
       // Assert
       assert.ok(isFailure(result));
       assert.deepStrictEqual(result.ctx, { text: 'bbbb', index:1, path: '' });
-      assert.deepStrictEqual(result.history, ['zeroOrMany', "','"]);
+      assert.deepStrictEqual(result.history, ['zeroOrMany', 'map', "test"]);
     });
 
     it(`case: zeroOrMany(surely(str('b')), str(',')) -> 'c,b,b'`, () => {

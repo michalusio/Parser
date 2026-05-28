@@ -12,7 +12,7 @@ export function str<T extends string>(match: T): Parser<T> {
       else {
           return failure(ctx, inQuotes, [inQuotes]);
       }
-  }, { parserType: 'anyString', matches: [[match, false, (v: string) => v]] });
+  }, { parserType: 'str', matches: [[match, false, (v: string) => v]] });
 }
 
 const collator = new Intl.Collator('en', { sensitivity: 'accent' });
@@ -31,5 +31,5 @@ export function stri<T extends string>(match: T): Parser<Lowercase<T>> {
       else {
           return failure(ctx, inQuotes, [inQuotes]);
       }
-  }, { parserType: 'anyString', matches: [[lowercase, true, (v: string) => v]] });
+  }, { parserType: 'stri', matches: [[lowercase, true, (v: string) => v]] });
 }

@@ -1,4 +1,4 @@
-import { Context, failure, isFailure, Parser, Result, success } from "../types";
+import { Context, isFailure, Parser, Result, success } from "../types";
 
 /** Parses zero or more occurences of the given parser, separated with the separator parser.
  * @returns A parser returning an array of many parses, omitting the separator.
@@ -15,7 +15,10 @@ export function zeroOrMany<T, V>(
                 const surelyIndex = res.history.findIndex(h => h === 'surely');
                 // Stryker disable next-line EqualityOperator: The > mutant results in an equivalent mutant
                 if (surelyIndex >= 0) {
-                    return failure(res.ctx, res.expected, ['zeroOrMany', ...res.history.slice(0, surelyIndex), ...res.history.slice(surelyIndex + 1)]);
+                    return {
+                        ...res,
+                        history: ['zeroOrMany', ...res.history.slice(0, surelyIndex), ...res.history.slice(surelyIndex + 1)]
+                    };
                 }
                 return success(ctx, results);
             }
@@ -27,7 +30,10 @@ export function zeroOrMany<T, V>(
                     const surelyIndex = resSep.history.findIndex(h => h === 'surely');
                     // Stryker disable next-line EqualityOperator: The > mutant results in an equivalent mutant
                     if (surelyIndex >= 0) {
-                        return failure(resSep.ctx, resSep.expected, ['zeroOrMany', ...resSep.history.slice(0, surelyIndex), ...resSep.history.slice(surelyIndex + 1)]);
+                        return {
+                            ...resSep,
+                            history: ['zeroOrMany', ...resSep.history.slice(0, surelyIndex), ...resSep.history.slice(surelyIndex + 1)]
+                        };
                     }
                     return success(ctx, results);
                 }
@@ -36,7 +42,10 @@ export function zeroOrMany<T, V>(
                     const surelyIndex = res.history.findIndex(h => h === 'surely');
                     // Stryker disable next-line EqualityOperator: The > mutant results in an equivalent mutant
                     if (surelyIndex >= 0) {
-                        return failure(res.ctx, res.expected, ['zeroOrMany', ...res.history.slice(0, surelyIndex), ...res.history.slice(surelyIndex + 1)]);
+                        return {
+                            ...res,
+                            history: ['zeroOrMany', ...res.history.slice(0, surelyIndex), ...res.history.slice(surelyIndex + 1)]
+                        };
                     }
                     return success(ctx, results);
                 }
@@ -53,7 +62,10 @@ export function zeroOrMany<T, V>(
                 const surelyIndex = res.history.findIndex(h => h === 'surely');
                 // Stryker disable next-line EqualityOperator: The > mutant results in an equivalent mutant
                 if (surelyIndex >= 0) {
-                    return failure(res.ctx, res.expected, ['zeroOrMany', ...res.history.slice(0, surelyIndex), ...res.history.slice(surelyIndex + 1)]);
+                    return {
+                        ...res,
+                        history: ['zeroOrMany', ...res.history.slice(0, surelyIndex), ...res.history.slice(surelyIndex + 1)]
+                    };
                 }
                 return success(ctx, results);
             }

@@ -57,6 +57,11 @@ describe('str', function() {
     });
   });
 
+  it('should have marker', () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    assert.deepEqual((str('') as any).parserType, 'str');
+  });
+
   describe('should fail', () => {
     it('when the value is not equal', () => {
       // Arrange
@@ -194,7 +199,10 @@ describe('stri', function() {
     });
   });
 
-  
+  it('should have marker', () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    assert.deepEqual((stri('') as any).parserType, 'stri');
+  });
 
   describe('should fail', () => {
     it('when the value is not equal', () => {
@@ -207,6 +215,8 @@ describe('stri', function() {
 
       // Assert
       assert.ok(isFailure(result));
+      assert.equal(result.expected, "'some other value'");
+      assert.deepEqual(result.history, ["'some other value'"]);
     });
     it('when the value is not equal 2', () => {
       // Arrange

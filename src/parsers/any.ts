@@ -1,4 +1,4 @@
-import { Context, Failure, failure, isFailure, Parser, Result } from '../types';
+import { Context, Failure, isFailure, Parser, Result } from '../types';
 import { anyString } from './anyString';
 import { shouldPerformFusions, allStringParsers } from './optimizations';
 
@@ -18,7 +18,7 @@ export function any<T, U>(...parsers: [Parser<T>, Parser<U>]): Parser<T | U>
 export function any<T>(...parsers: [Parser<T>]): Parser<T>
 export function any<T>(...parsers: Parser<T>[]): Parser<T>
 export function any<T>(...parsers: Parser<T>[]): Parser<T> {
-    let marker = {};
+    let marker;
     if (shouldPerformFusions() && allStringParsers(parsers)) {
         const matches = parsers.flatMap(p => p.matches);
         // Not fusing if not enough matches
@@ -26,24 +26,36 @@ export function any<T>(...parsers: Parser<T>[]): Parser<T> {
         if (matches.length > 10) {
             return anyString(matches) as Parser<T>;
         } else {
-            marker = { parserType: 'anyString', matches };
+            marker = { parserType: 'any', matches };
         }
     }
     return Object.assign((ctx: Context): Result<T> => {
-        const expected: Failure[] = [];
+        let longestExpected: Failure = {
+            ctx,
+            expected: '',
+            history: [],
+            success: false
+        };
         for (const parser of parsers) {
             const res = parser(ctx);
             if (isFailure(res)) {
                 const surelyIndex = res.history.findIndex(h => h === 'surely');
                 // Stryker disable next-line EqualityOperator: The > mutant results in an equivalent mutant
                 if (surelyIndex >= 0) {
-                    return failure(res.ctx, res.expected, ['any', ...res.history.slice(0, surelyIndex), ...res.history.slice(surelyIndex + 1)]);
+                    return {
+                        ...res,
+                        history: ['any', ...res.history.slice(0, surelyIndex), ...res.history.slice(surelyIndex + 1)]
+                    };
                 }
-                expected.push(res);
+                if (longestExpected.history.length < res.history.length) {
+                    longestExpected = res;
+                }
             }
             else return res;
         }
-        const longest = expected.reduce((a, b) => a.history.length > b.history.length ? a : b);
-        return failure(longest.ctx, longest.expected, ['any', ...longest.history]);
+        return {
+            ...longestExpected,
+            history: ['any', ...longestExpected.history]
+        };
     }, marker);
 }

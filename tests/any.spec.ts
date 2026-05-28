@@ -82,7 +82,27 @@ describe('any', function() {
     });
   });
 
+  it('should have marker', () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    assert.deepEqual((any(str('')) as any).parserType, 'any');
+  });
+
   describe('should fail', () => {
+    it(`case: any() -> 'abc'`, () => {
+      // Arrange
+      const ctx: Context = { text: 'abc', index: 0, path: '' };
+      const parser = any();
+
+      // Act
+      const result = parser(ctx);
+
+      // Assert
+      assert.ok(isFailure(result));
+      assert.deepEqual(result.ctx, ctx);
+      assert.equal(result.expected, '');
+      assert.deepEqual(result.history, ['any']);
+    });
+
     it(`case: any(str('b'), str('w')) -> 'abc'`, () => {
       // Arrange
       const ctx: Context = { text: 'abc', index: 0, path: '' };
@@ -93,6 +113,20 @@ describe('any', function() {
 
       // Assert
       assert.ok(isFailure(result));
+    });
+
+    it(`case: any(str('x'), str('w')) -> 'abc'`, () => {
+      // Arrange
+      const ctx: Context = { text: 'abc', index: 0, path: '' };
+      const parser = any(str('x'), str('w'));
+
+      // Act
+      const result = parser(ctx);
+
+      // Assert
+      assert.ok(isFailure(result));
+      assert.equal(result.expected, `'x'`);
+      assert.deepEqual(result.history, ['any', `'x'`]);
     });
 
     it(`case: any(str(' ')) -> 'xasf'`, () => {

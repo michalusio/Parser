@@ -1,6 +1,6 @@
 import * as assert from 'assert';
 
-import { any, seq, str, surely, oneOrMany } from '../src/parsers';
+import { any, seq, str, surely, oneOrMany, map, expectErase } from '../src/parsers';
 import { Context, isFailure } from '../src/types';
 
 describe('oneOrMany', function() {
@@ -114,10 +114,10 @@ describe('oneOrMany', function() {
       assert.deepStrictEqual(result.history, ['oneOrMany', "'b'"]);
     });
 
-    it(`case: oneOrMany(str('b'), surely(str(','))) -> 'bbbb'`, () => {
+    it(`case: oneOrMany(str('b'), map(surely(expectErase(str(','), 'test')), x => x)) -> 'bbbb'`, () => {
       // Arrange
       const ctx: Context = { text: 'bbbb', index: 0, path: '' };
-      const parser = oneOrMany(str('b'), surely(str(',')));
+      const parser = oneOrMany(str('b'), map(surely(expectErase(str(','), 'test')), x => x));
 
       // Act
       const result = parser(ctx);
@@ -125,7 +125,7 @@ describe('oneOrMany', function() {
       // Assert
       assert.ok(isFailure(result));
       assert.deepStrictEqual(result.ctx, { text: 'bbbb', index:1, path: '' });
-      assert.deepStrictEqual(result.history, ['oneOrMany', "','"]);
+      assert.deepStrictEqual(result.history, ['oneOrMany', "map", "test"]);
     });
 
     it(`case: oneOrMany(surely(str('b')), str(',')) -> 'c,b,b'`, () => {

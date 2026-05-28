@@ -112,7 +112,7 @@ describe('json', function() {
     });
 });
 
-xdescribe('json benchmark', function() {
+describe('json benchmark', function() {
     this.timeout(5000);
     this.slow(2000);
 

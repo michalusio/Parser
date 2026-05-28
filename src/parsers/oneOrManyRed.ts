@@ -11,7 +11,10 @@ export function oneOrManyRed<T, V, U = T>(
     return (ctx: Context): Result<U | T> => {
         const res = item(ctx);
         if (isFailure(res)) {
-            return failure(res.ctx, res.expected, ['oneOrManyRed', ...res.history]);
+            return {
+                ...res,
+                history: ['oneOrManyRed', ...res.history]
+            };
         }
         ctx = res.ctx;
         let result: U | T = res.value;
@@ -21,7 +24,10 @@ export function oneOrManyRed<T, V, U = T>(
                 const surelyIndex = resSep.history.findIndex(h => h === 'surely');
                 // Stryker disable next-line EqualityOperator: The > mutant results in an equivalent mutant
                 if (surelyIndex >= 0) {
-                    return failure(resSep.ctx, resSep.expected, ['oneOrManyRed', ...resSep.history.slice(0, surelyIndex), ...resSep.history.slice(surelyIndex + 1)]);
+                    return {
+                        ...resSep,
+                        history: ['oneOrManyRed', ...resSep.history.slice(0, surelyIndex), ...resSep.history.slice(surelyIndex + 1)]
+                    };
                 }
                 return success(ctx, result);
             }
@@ -30,7 +36,10 @@ export function oneOrManyRed<T, V, U = T>(
                 const surelyIndex = res.history.findIndex(h => h === 'surely');
                 // Stryker disable next-line EqualityOperator: The > mutant results in an equivalent mutant
                 if (surelyIndex >= 0) {
-                    return failure(res.ctx, res.expected, ['oneOrManyRed', ...res.history.slice(0, surelyIndex), ...res.history.slice(surelyIndex + 1)]);
+                    return {
+                        ...res,
+                        history: ['oneOrManyRed', ...res.history.slice(0, surelyIndex), ...res.history.slice(surelyIndex + 1)]
+                    };
                 }
                 return success(ctx, result);
             }

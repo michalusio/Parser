@@ -13,8 +13,10 @@ export const toggleFusions = (value: boolean) => {
   performFusions = value;
 };
 
+const fused = ['anyString', 'map', 'any', 'str', 'stri'];
+
 export function isStringParser<T>(parser: Parser<T>): parser is AnyStringParser<T> {
-    return 'parserType' in parser && typeof parser.parserType === 'string' && parser.parserType === 'anyString';
+    return 'parserType' in parser && fused.includes(parser.parserType as string);
 }
 export function allStringParsers<T>(parsers: Parser<T>[]): parsers is AnyStringParser<T>[] {
     return parsers.every(isStringParser);

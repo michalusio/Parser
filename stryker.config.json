@@ -20,5 +20,6 @@
   "mutate": [
     "src/**/*.{js,ts,jsx,tsx,cts,mts}"
   ],
-  "ignoreStatic": true
+  "ignoreStatic": true,
+  "concurrency": "50%"
 }

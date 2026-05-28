@@ -1,4 +1,4 @@
-import { Context, failure, isFailure, Parser, Result, success } from '../types';
+import { Context, isFailure, Parser, Result, success } from '../types';
 
 /** Parses a sequence of parsers going from left to right, returning the results of the parsers.
  * @returns A parser parsing the sequence of parsers.
@@ -21,7 +21,10 @@ export function seq<T>(...parsers: Parser<T>[]): Parser<T[]> {
         for (const parser of parsers) {
             const res = parser(ctx);
             ctx = res.ctx;
-            if (isFailure(res)) return failure(res.ctx, res.expected, ['seq', ...res.history]);
+            if (isFailure(res)) return {
+                ...res,
+                history: ['seq', ...res.history]
+            };
             values.push(res.value);
         }
         return success(ctx, values);

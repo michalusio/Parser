@@ -37,8 +37,8 @@ const replacements: Record<string, string> = {
 
 const StringLiteral = between(Quote,
     map(
-        regex(/(?:[^\\"]|\\(?:[0bfnrtv"\\]|u[0-9a-fA-F]{4}))*/, 'string literal'),
-        str => str.replace(/\\(?:[0bfnrtv"\\]|u[0-9a-fA-F]{4})/g, function(replace) {
+        regex(/(?:[^\\"]|\\(?:[0bfnrt"\\]|u[0-9a-fA-F]{4}))*/, 'string literal'),
+        str => str.replace(/\\(?:[0bfnrt"\\]|u[0-9a-fA-F]{4})/g, function(replace) {
         const tabled = replacements[replace];
         if (tabled != null) {
             return tabled;
