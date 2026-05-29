@@ -1,15 +1,15 @@
 {
   "compilerOptions": {
-    "outDir": "dist",
-    "rootDir": "src",
+    "rootDir": "./",
     "target": "es2021",
-    "module": "commonjs",
+    "module": "CommonJS",
     "noEmitOnError": true,
     "skipLibCheck": true,
     "alwaysStrict": true,
     "declaration": true,
     "strict": true,
-    "lib": ["es2021"]
+    "lib": ["es2021"],
+    "types": ["*"]
   },
-  "include": ["./src/**/*"],
+  "include": ["./tests/**/*", "./src/**/*"],
 }

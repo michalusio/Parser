@@ -10,7 +10,8 @@
     "alwaysStrict": true,
     "declaration": true,
     "strict": true,
-    "lib": ["es2021"]
+    "lib": ["es2021"],
+    "types": ["*"]
   },
   "include": ["./src/**/*"],
 }

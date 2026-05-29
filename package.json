@@ -15,9 +15,8 @@
   "homepage": "https://github.com/michalusio/Parser#readme",
   "description": "A library of parser combinators, with which you can create your own parsers. The library will be continuously improved in time.",
   "scripts": {
-    "start": "tsc && node .",
     "lint": "eslint src --ext .ts",
-    "build": "tsc",
+    "build": "tsc --project tsconfig.commonjs.json",
     "build-esm": "tsc --project tsconfig.esm.json",
     "bundle": "npm run lint && npm run build && npm run build-esm",
     "test:mutate": "stryker run",
@@ -36,14 +35,14 @@
     "@stryker-mutator/mocha-runner": "^9.6.1",
     "@stryker-mutator/typescript-checker": "^9.6.1",
     "@types/mocha": "10.0.10",
-    "@types/node": "25.9.1",
+    "@types/node": "^25.9.1",
     "cross-env": "10.1.0",
     "esbuild": "0.28.0",
     "eslint": "9.39.2",
     "mocha": "11.7.6",
     "nyc": "18.0.0",
     "ts-node": "10.9.2",
-    "typescript": "5.9.3",
+    "typescript": "6.0.3",
     "typescript-eslint": "8.60.0"
   },
   "keywords": [
